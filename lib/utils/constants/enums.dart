@@ -1,0 +1,4 @@
+enum AuthenticationPage {
+  login,
+  signUp,
+}

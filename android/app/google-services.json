@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "464770096219",
+    "project_id": "motox-15f98",
+    "storage_bucket": "motox-15f98.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464770096219:android:0bce6e72694b848569f37e",
+        "android_client_info": {
+          "package_name": "com.example.motox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo6xucfLAGDFyWSGpc_ppUdqkv4jT-fMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
