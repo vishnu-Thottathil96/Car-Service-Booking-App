@@ -56,7 +56,7 @@ class OnboardingPage extends StatelessWidget {
             style: TextStyle(fontSize: 16),
             textAlign: TextAlign.left,
           ),
-          vertical60,
+          vertical90,
           index == 2
               ? GestureDetector(
                   onTap: () => Navigator.push(

@@ -40,6 +40,8 @@ dependencies:
   google_fonts: ^6.1.0
   smooth_page_indicator: ^1.1.0
   firebase_auth: ^4.10.1
+  bloc: ^8.1.2
+  flutter_otp_text_field: ^1.1.1
   
 
 dev_dependencies:
@@ -68,6 +70,7 @@ flutter:
   assets:
      - assets/onboardscreens/
      - assets/logo/
+     - assets/icons/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

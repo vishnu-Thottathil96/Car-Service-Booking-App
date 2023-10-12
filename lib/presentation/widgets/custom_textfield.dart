@@ -9,6 +9,8 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.sufixIcon,
     required this.prefixIcon,
+    this.validator,
+    this.ispassword = false,
   }) : super(key: key);
 
   final String text;
@@ -16,10 +18,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final Widget? sufixIcon;
   final Widget prefixIcon;
+  final String? Function(String?)? validator;
+  final bool ispassword;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: ispassword,
       cursorColor: blackColor,
       style: TextStyle(color: blackColor),
       decoration: InputDecoration(
@@ -33,7 +38,8 @@ class CustomTextField extends StatelessWidget {
               UnderlineInputBorder(borderSide: BorderSide(color: blackColor))),
       controller: controller,
       keyboardType: keyboardType,
-      maxLines: null,
+      maxLines: ispassword ? 1 : null,
+      validator: validator,
     );
   }
 }

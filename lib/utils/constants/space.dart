@@ -42,3 +42,9 @@ const vertical90 = SizedBox(
 const vertical100 = SizedBox(
   height: 100,
 );
+const vertical200 = SizedBox(
+  height: 200,
+);
+const vertical300 = SizedBox(
+  height: 300,
+);
