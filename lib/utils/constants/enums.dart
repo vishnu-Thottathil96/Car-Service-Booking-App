@@ -4,6 +4,7 @@ enum AuthenticationPage {
 }
 
 enum AuthExceptions {
+  initial,
   weekPassword,
   wrongPassword,
   userNotFound,
@@ -11,4 +12,5 @@ enum AuthExceptions {
   loginSuccess,
   signUpSuccess,
   somethingWentWrong,
+  verified,
 }

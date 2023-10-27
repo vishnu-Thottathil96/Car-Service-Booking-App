@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,7 @@ class AuthRepository {
         email: email,
         password: password,
       );
+      FirebaseAuth.instance.currentUser!.sendEmailVerification();
       return AuthExceptions.signUpSuccess;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -48,5 +50,36 @@ class AuthRepository {
         return AuthExceptions.somethingWentWrong;
       }
     }
+  }
+
+  static Future<AuthExceptions> verifyMail() async {
+    await FirebaseAuth.instance.currentUser!.reload();
+    final bool isEmailVerified =
+        FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+    if (isEmailVerified) {
+      return AuthExceptions.verified;
+    } else {
+      Completer<AuthExceptions> completer = Completer();
+      Timer.periodic(const Duration(seconds: 3), (timer) async {
+        await FirebaseAuth.instance.currentUser!.reload();
+        if (FirebaseAuth.instance.currentUser!.emailVerified) {
+          timer.cancel();
+          completer.complete(AuthExceptions.verified);
+        }
+      });
+      return completer.future;
+    }
+  }
+
+  static Future deleteUser() async {
+    await FirebaseAuth.instance.currentUser!.delete();
+  }
+
+  static bool confirmVerification() {
+    FirebaseAuth.instance.currentUser!.reload();
+    if (FirebaseAuth.instance.currentUser!.emailVerified) {
+      return true;
+    }
+    return false;
   }
 }

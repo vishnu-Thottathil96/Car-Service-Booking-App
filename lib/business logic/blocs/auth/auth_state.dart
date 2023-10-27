@@ -3,13 +3,16 @@ part of 'auth_bloc.dart';
 
 class AuthState {
   final bool isSaving;
-  final AuthExceptions? authExceptions;
+  final bool isLogin;
+  final AuthExceptions authExceptions;
   AuthState({
     required this.isSaving,
-    this.authExceptions,
+    required this.authExceptions,
+    this.isLogin = false,
   });
 }
 
 final class AuthInitial extends AuthState {
-  AuthInitial() : super(isSaving: false);
+  AuthInitial()
+      : super(isSaving: false, authExceptions: AuthExceptions.initial);
 }

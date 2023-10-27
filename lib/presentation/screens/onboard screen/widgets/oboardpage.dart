@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motox/presentation/screens/login&signup/screen_login_signup.dart';
+import 'package:motox/presentation/widgets/large_button.dart';
 import 'package:motox/utils/colors/colors.dart';
 import 'package:motox/utils/constants/enums.dart';
 import 'package:motox/utils/constants/font_weights.dart';
@@ -58,27 +59,17 @@ class OnboardingPage extends StatelessWidget {
           ),
           vertical90,
           index == 2
-              ? GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginAndSignupPage(
-                            authenticationPage: AuthenticationPage.login),
-                      )),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.orange,
-                    ),
-                    width: width / 1.8,
-                    height: height / 15,
-                    child: Center(
-                        child: Text(
-                      'Get Started',
-                      style: TextStyle(
-                          color: whiteColor, fontWeight: MyFontWeights.bold),
-                    )),
-                  ),
+              ? LargeButton(
+                  text: 'Get Started',
+                  context: context,
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginAndSignupPage(
+                              authenticationPage: AuthenticationPage.login),
+                        ));
+                  },
                 )
               : const SizedBox()
         ],

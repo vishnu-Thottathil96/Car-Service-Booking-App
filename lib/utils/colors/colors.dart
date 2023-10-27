@@ -7,3 +7,4 @@ Color whiteColor = Colors.white;
 Color greenColor = Colors.green;
 Color greyColor = Colors.grey;
 Color blueColor = Colors.blue;
+Color redColor = Colors.red;

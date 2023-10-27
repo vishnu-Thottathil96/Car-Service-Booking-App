@@ -22,3 +22,5 @@ class SignUpEvent extends AuthEvent {
     required this.password,
   });
 }
+
+class MailVerificationEvent extends AuthEvent {}

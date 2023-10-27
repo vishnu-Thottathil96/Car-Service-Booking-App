@@ -41,7 +41,13 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   firebase_auth: ^4.10.1
   bloc: ^8.1.2
-  flutter_otp_text_field: ^1.1.1
+  hexcolor: ^3.0.1
+  grouped_list: ^5.1.2
+  intl: ^0.17.0
+  calendar_date_picker2: ^0.5.3
+  flutter_time_slot_picker: ^0.0.9
+  
+
   
 
 dev_dependencies:
@@ -71,6 +77,7 @@ flutter:
      - assets/onboardscreens/
      - assets/logo/
      - assets/icons/
+     - assets/home_screen_images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -5,7 +5,7 @@ import 'package:motox/utils/constants/font_weights.dart';
 class TextStyles {
   // Heading Text Style
   static TextStyle mainHeadingBlack = TextStyle(
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: MyFontWeights.extraBold,
     color: blackColor,
   );
@@ -26,6 +26,11 @@ class TextStyles {
     fontWeight: MyFontWeights.regular,
     color: greyColor,
   );
+  static TextStyle normalTextWhite = TextStyle(
+    fontSize: 15,
+    fontWeight: MyFontWeights.regular,
+    color: whiteColor,
+  );
   static TextStyle normalTextBlack = TextStyle(
     fontSize: 15,
     fontWeight: MyFontWeights.regular,
@@ -35,5 +40,10 @@ class TextStyles {
     fontSize: 15,
     fontWeight: MyFontWeights.regular,
     color: gradientOrange,
+  );
+  static TextStyle buttonText = TextStyle(
+    fontSize: 20,
+    fontWeight: MyFontWeights.bold,
+    color: whiteColor,
   );
 }

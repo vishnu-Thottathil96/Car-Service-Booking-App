@@ -4,22 +4,26 @@ import 'package:motox/utils/colors/colors.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
-    required this.text,
+    this.text,
     this.controller,
     this.keyboardType = TextInputType.text,
     this.sufixIcon,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.validator,
     this.ispassword = false,
+    this.hint,
+    this.contentPadding,
   }) : super(key: key);
 
-  final String text;
+  final String? text;
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final Widget? sufixIcon;
-  final Widget prefixIcon;
+  final Widget? prefixIcon;
   final String? Function(String?)? validator;
   final bool ispassword;
+  final String? hint;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +32,10 @@ class CustomTextField extends StatelessWidget {
       cursorColor: blackColor,
       style: TextStyle(color: blackColor),
       decoration: InputDecoration(
+          contentPadding: contentPadding,
           prefixIcon: prefixIcon,
           suffixIcon: sufixIcon,
+          hintText: hint,
           labelText: text,
           labelStyle: TextStyle(color: blackColor),
           enabledBorder:
