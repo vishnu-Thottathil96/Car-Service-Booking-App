@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:motox/presentation/widgets/large_button.dart';
@@ -53,6 +52,7 @@ class SlotSelectionPage extends StatelessWidget {
                     } else {
                       Dialogs.showAlert(context, 'Incorrect date!',
                           'Selected date is invalid. Please pick current or future date.');
+
                       _dates[0] = currentDate;
                     }
                   },
@@ -75,7 +75,7 @@ class SlotSelectionPage extends StatelessWidget {
                         Text('Occupied'),
                         CircleAvatar(
                           radius: 8,
-                          backgroundColor: greyColor,
+                          backgroundColor: greenColor,
                         ),
                         Text('Free'),
                       ],
@@ -95,15 +95,44 @@ class SlotSelectionPage extends StatelessWidget {
                             crossAxisSpacing: 10),
                     itemCount: 12,
                     itemBuilder: (context, index) {
-                      return Container(
-                        height: 100,
-                        color: index == 7 || index == 5 || index == 16
-                            ? redColor
-                            : greyColor,
-                        child: Center(
-                          child: Text(
-                            periodicServiceSlotes[index],
-                            style: TextStyles.normalTextWhite,
+                      final slotItem = periodicServiceSlotes[index];
+                      // Determine the background color based on the slot state
+                      Color backgroundColor;
+                      if (slotItem.isSelected) {
+                        backgroundColor =
+                            Colors.blue; // Highlight the selected slot
+                      } else if (slotItem.isBooked) {
+                        backgroundColor = Colors.red; // Already booked slot
+                      } else {
+                        backgroundColor = Colors.green; // Free slot
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          // Deselect all slots
+
+                          periodicServiceSlotes.forEach((item) {
+                            item.isSelected = false;
+                          });
+                          // Toggle the selection state of the current slot
+                          !slotItem.isBooked
+                              ? slotItem.isSelected = !slotItem.isSelected
+                              : slotItem.isSelected = false;
+                          slotItem.isSelected
+                              ? log(slotItem.time.toString())
+                              : Dialogs.showAlert(context, 'Already Booked !',
+                                  'The slot is already booked');
+                        },
+                        child: Container(
+                          height: 100,
+                          color:
+                              backgroundColor, // Use the determined background color
+                          child: Center(
+                            child: Text(
+                              slotItem.time,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                       );
@@ -135,17 +164,47 @@ class SlotSelectionPage extends StatelessWidget {
                                           crossAxisCount: 3,
                                           mainAxisSpacing: 20,
                                           crossAxisSpacing: 20),
-                                  itemCount: serviceTypes.length - 1,
+                                  itemCount: typesOfServices.length - 1,
                                   itemBuilder: (context, index) {
-                                    final heading = serviceTypes[index + 1];
-                                    final images = homeScrenImage[index + 1];
+                                    final serviceItem =
+                                        typesOfServices[index + 1];
+                                    final heading =
+                                        typesOfServices[index + 1].heading;
+                                    final images =
+                                        typesOfServices[index + 1].imagePath;
                                     return Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Image.asset(
-                                          images.toString(),
-                                          fit: BoxFit.contain,
+                                        GestureDetector(
+                                          onTap: () {
+                                            serviceItem.isSelected =
+                                                !serviceItem.isSelected;
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: Image.asset(
+                                                  images.toString(),
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                              serviceItem.isSelected
+                                                  ? Positioned.fill(
+                                                      child: Container(
+                                                        color: Colors.blue
+                                                            .withOpacity(0.5),
+                                                        child: Icon(
+                                                          Icons.check_box,
+                                                          color: greenColor,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : SizedBox()
+                                            ],
+                                          ),
                                         ),
                                         Text(
                                           heading.toString(),

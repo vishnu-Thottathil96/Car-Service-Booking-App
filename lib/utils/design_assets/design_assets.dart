@@ -1,4 +1,6 @@
 import 'package:motox/data/models/model_message.dart';
+import 'package:motox/data/models/model_service_item.dart';
+import 'package:motox/data/models/model_time_slot.dart';
 import 'package:motox/utils/colors/colors.dart';
 
 List homeScrenImage = [
@@ -100,17 +102,30 @@ List<Message> messages = [
       date: DateTime.now().subtract(const Duration(days: 1)),
       isSendByMe: false),
 ];
-List<String> periodicServiceSlotes = [
-  '09.00 PM',
-  '09.30 PM',
-  '10.00 PM',
-  '10.30 PM',
-  '11.00 PM',
-  '11.30 PM',
-  '12.00 PM',
-  '13.30 PM',
-  '01.00 PM',
-  '01.30 PM',
-  '02.00 PM',
-  '02.30 PM',
+List<SlotItem> periodicServiceSlotes = [
+  SlotItem(time: '09.00 AM'),
+  SlotItem(time: '09.30 AM'),
+  SlotItem(time: '10.00 AM'),
+  SlotItem(time: '10.30 AM', isBooked: true),
+  SlotItem(time: '11.00 AM'),
+  SlotItem(time: '11.30 AM'),
+  SlotItem(time: '12.00 PM', isBooked: true),
+  SlotItem(time: '12.30 PM'),
+  SlotItem(time: '01.00 PM'),
+  SlotItem(time: '01.30 PM'),
+  SlotItem(time: '02.00 PM'),
+  SlotItem(time: '02.30 PM'),
+];
+List<ServiceItem> typesOfServices = [
+  ServiceItem(
+      heading: 'Periodic', imagePath: 'assets/home_screen_images/1.jpg'),
+  ServiceItem(
+      heading: 'Detailing', imagePath: 'assets/home_screen_images/2.jpg'),
+  ServiceItem(
+      heading: 'AC repair', imagePath: 'assets/home_screen_images/3.jpg'),
+  ServiceItem(heading: 'Wheels', imagePath: 'assets/home_screen_images/4.jpg'),
+  ServiceItem(
+      heading: 'Painting', imagePath: 'assets/home_screen_images/5.jpg'),
+  ServiceItem(
+      heading: 'Electronics', imagePath: 'assets/home_screen_images/6.jpg'),
 ];
