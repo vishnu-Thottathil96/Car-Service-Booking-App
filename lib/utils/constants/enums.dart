@@ -14,3 +14,11 @@ enum AuthExceptions {
   somethingWentWrong,
   verified,
 }
+
+enum ServiceStatus {
+  rejected,
+  pending,
+  booked,
+  inProgress,
+  finished,
+}

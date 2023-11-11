@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:motox/utils/colors/colors.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    Key? key,
-    this.text,
-    this.controller,
-    this.keyboardType = TextInputType.text,
-    this.sufixIcon,
-    this.prefixIcon,
-    this.validator,
-    this.ispassword = false,
-    this.hint,
-    this.contentPadding,
-  }) : super(key: key);
+  const CustomTextField(
+      {Key? key,
+      this.text,
+      this.controller,
+      this.keyboardType = TextInputType.text,
+      this.sufixIcon,
+      this.prefixIcon,
+      this.validator,
+      this.ispassword = false,
+      this.hint,
+      this.contentPadding,
+      this.maximumLines})
+      : super(key: key);
 
   final String? text;
   final TextInputType keyboardType;
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
   final bool ispassword;
   final String? hint;
   final EdgeInsetsGeometry? contentPadding;
+  final int? maximumLines;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class CustomTextField extends StatelessWidget {
               UnderlineInputBorder(borderSide: BorderSide(color: blackColor))),
       controller: controller,
       keyboardType: keyboardType,
-      maxLines: ispassword ? 1 : null,
+      maxLines: ispassword ? 1 : maximumLines,
       validator: validator,
     );
   }

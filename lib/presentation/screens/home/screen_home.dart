@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:motox/data/repositories/user_repository.dart';
 import 'package:motox/presentation/screens/home/widgets/section_poster.dart';
 import 'package:motox/presentation/screens/home/widgets/section_services.dart';
 import 'package:motox/presentation/screens/home/widgets/section_userinfo.dart';
@@ -18,8 +20,19 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                buildUserInfoSection(context),
-                vertical20,
+                FutureBuilder<String>(
+                  future: UserRepository.getCurrentUserName(
+                      FirebaseAuth.instance.currentUser!.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(); // Loading indicator
+                    }
+                    final userName = snapshot.data!;
+
+                    return buildUserInfoSection(context, userName);
+                  },
+                ),
+                vertical10,
                 buildPosterSection(context),
                 vertical20,
                 buildServiceTypesSection(context),

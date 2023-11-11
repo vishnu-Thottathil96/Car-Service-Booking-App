@@ -46,6 +46,12 @@ dependencies:
   intl: ^0.17.0
   calendar_date_picker2: ^0.5.3
   flutter_time_slot_picker: ^0.0.9
+  cloud_firestore: ^4.12.1
+  url_launcher: ^6.2.1
+  image_picker: ^1.0.4
+  firebase_storage: ^11.4.0
+  step_progress_indicator: ^1.0.2
+  transparent_image: ^2.0.1
   
 
   

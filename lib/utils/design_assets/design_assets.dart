@@ -35,14 +35,14 @@ List status = [
   'On Progress',
   'Completed',
 ];
-List statusColor = [
-  greenColor,
-  gradientOrange,
-  blackColor,
-  greenColor,
-  gradientOrange,
-  blackColor,
-];
+// List statusColor = [
+//   greenColor,
+//   gradientOrange,
+//   blackColor,
+//   greenColor,
+//   gradientOrange,
+//   blackColor,
+// ];
 List helpPageIcons = [
   'assets/icons/faq.png',
   'assets/icons/chat.png',
@@ -106,10 +106,10 @@ List<SlotItem> periodicServiceSlotes = [
   SlotItem(time: '09.00 AM'),
   SlotItem(time: '09.30 AM'),
   SlotItem(time: '10.00 AM'),
-  SlotItem(time: '10.30 AM', isBooked: true),
+  SlotItem(time: '10.30 AM'),
   SlotItem(time: '11.00 AM'),
   SlotItem(time: '11.30 AM'),
-  SlotItem(time: '12.00 PM', isBooked: true),
+  SlotItem(time: '12.00 PM'),
   SlotItem(time: '12.30 PM'),
   SlotItem(time: '01.00 PM'),
   SlotItem(time: '01.30 PM'),
@@ -129,3 +129,55 @@ List<ServiceItem> typesOfServices = [
   ServiceItem(
       heading: 'Electronics', imagePath: 'assets/home_screen_images/6.jpg'),
 ];
+// Create instances of cars with different brands
+// Car car1 = Car(
+//   make: 'Toyota',
+//   model: 'Camry',
+//   year: 2023,
+//   fuel: 'Petrol',
+//   licensePlate: 'ABC-123',
+// );
+
+// Car car2 = Car(
+//   make: 'Honda',
+//   model: 'Civic',
+//   year: 2023,
+//   fuel: 'Petrol',
+//   licensePlate: 'XYZ-456',
+// );
+
+// Car car3 = Car(
+//   make: 'Ford',
+//   model: 'Mustang',
+//   year: 2023,
+//   fuel: 'Petrol',
+//   licensePlate: 'DEF-789',
+// );
+
+// Car car4 = Car(
+//   make: 'BMW',
+//   model: 'X5',
+//   year: 2023,
+//   fuel: 'Petrol',
+//   licensePlate: 'GHI-101',
+// );
+
+// Car car5 = Car(
+//   make: 'Mercedes-Benz',
+//   model: 'E-Class',
+//   year: 2023,
+//   fuel: 'Petrol',
+//   licensePlate: 'JKL-202',
+// );
+
+// Store the cars in a list
+// List<Car> userCars = [car1, car2, car3, car4, car5];
+// List<String> carModelImages = [
+//   'https://media.zigcdn.com/media/model/2023/Mar/toyota-camry-1_930x620.jpg',
+//   'https://stat.overdrive.in/wp-content/uploads/2022/07/03-2023-Honda-Civic-Type-R-900x506.jpg',
+//   'https://imgd.aeplcdn.com/664x374/cw/ec/23766/Ford-Mustang-Exterior-126883.jpg?wm=0&q=80',
+//   'https://imgd.aeplcdn.com/642x336/n/cw/ec/152681/x5-exterior-right-front-three-quarter-5.jpeg?isig=0&q=80',
+//   'https://www.mercedes-benz.co.in/content/dam/hq/passengercars/cars/e-class/e-class-saloon-w213-fl-pi/modeloverview/12-2022/images/mercedes-benz-e-class-saloon-w213-696x392-12-2022.png',
+//   'https://stimg.cardekho.com/images/car-images/large/Nissan/Nissan-GTR/744/Nissan_GT-R_BLUE-RACING_000514.jpg?impolicy=resize&imwidth=420',
+//   'https://www.solido.com/wp-content/uploads/2022/05/toyota-supra-mk4-a80-targa-roof-super-white-1993-04.jpg',
+// ];

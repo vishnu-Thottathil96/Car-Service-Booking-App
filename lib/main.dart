@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motox/business%20logic/blocs/auth/auth_bloc.dart';
 import 'package:motox/business%20logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
-import 'package:motox/presentation/splash/screen_splash.dart';
+import 'package:motox/presentation/screens/splash/screen_splash.dart';
 import 'firebase_options.dart';
 
 void main() async {

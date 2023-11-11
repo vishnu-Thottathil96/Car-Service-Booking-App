@@ -9,7 +9,8 @@ String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {
     return 'Email is required';
   }
-  // You can add more complex email validation logic here if needed
+
+  //   add more complex email validation logic
   return null;
 }
 
@@ -17,7 +18,7 @@ String? validatePassword(String? value) {
   if (value == null || value.isEmpty) {
     return 'Password is required';
   }
-  // You can add more password validation logic here if needed
+  //  add more password validation logic
   return null;
 }
 
@@ -28,5 +29,23 @@ String? validateConfirmPassword(String? value, String password) {
   if (value != password) {
     return 'Passwords do not match';
   }
+  return null;
+}
+
+String? validateCarYear(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Year is required';
+  }
+
+  //   add more complex email validation logic
+  return null;
+}
+
+String? validateRegisterNumber(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Number is required';
+  }
+
+  //   add more complex email validation logic
   return null;
 }

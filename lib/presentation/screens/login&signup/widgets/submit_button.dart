@@ -4,6 +4,7 @@ import 'package:motox/business%20logic/blocs/auth/auth_bloc.dart';
 import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
 import 'package:motox/presentation/screens/mail%20verification/screen_mailverify.dart';
 import 'package:motox/utils/constants/enums.dart';
+import 'package:motox/utils/controllers/text_editing_controllers.dart';
 import 'package:motox/utils/helpers/auth_results.dart';
 
 Widget buildAuthenticationButton(
@@ -18,17 +19,35 @@ Widget buildAuthenticationButton(
     child: BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.authExceptions == AuthExceptions.signUpSuccess) {
-          Navigator.pushReplacement(
+          TextEditingControllers.emailController.clear();
+          TextEditingControllers.passwordController.clear();
+          TextEditingControllers.confirmPasswordController.clear();
+          TextEditingControllers.nameController.clear();
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => const MailVerificationPage(),
+          //     ));
+          Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => const MailVerificationPage(),
-              ));
+                builder: (context) => MailVerificationPage(),
+              ),
+              (route) => false);
         } else if (state.authExceptions == AuthExceptions.loginSuccess) {
-          Navigator.pushReplacement(
+          TextEditingControllers.emailController.clear();
+          TextEditingControllers.passwordController.clear();
+          Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (context) => LandingPage(),
-              ));
+              ),
+              (route) => false);
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => LandingPage(),
+          //     ));
         }
         if (state.authExceptions != AuthExceptions.initial) {
           resultShow(state.authExceptions, context);

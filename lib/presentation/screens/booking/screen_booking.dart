@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:motox/data/repositories/service_repository.dart';
 import 'package:motox/presentation/screens/booking/widgets/booking_card.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/space.dart';
@@ -10,6 +12,7 @@ class BookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MyScreenSize.screenHeight(context);
+    ServiceRepository().fetchBookings();
 
     return Scaffold(
       body: SafeArea(
@@ -29,13 +32,23 @@ class BookingScreen extends StatelessWidget {
               ),
               vertical20,
               Expanded(
-                child: ListView.separated(
-                  itemBuilder: (context, index) =>
-                      buildBookingCard(index, height),
-                  separatorBuilder: (context, index) => vertical40,
-                  itemCount: 5,
-                ),
+                child: FutureBuilder(
+                    future: ServiceRepository().fetchBookings(
+                        userId: FirebaseAuth.instance.currentUser!.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError ||
+                          snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      return ListView.separated(
+                        itemBuilder: (context, index) => buildBookingCard(
+                            index, height, context, snapshot.data![index]),
+                        separatorBuilder: (context, index) => vertical20,
+                        itemCount: snapshot.data!.length,
+                      );
+                    }),
               ),
+              vertical100,
             ],
           ),
         ),

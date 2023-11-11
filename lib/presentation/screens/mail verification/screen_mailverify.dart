@@ -20,6 +20,7 @@ class MailVerificationPage extends StatelessWidget {
     context.read<AuthBloc>().add(MailVerificationEvent());
     return WillPopScope(
       onWillPop: () async {
+        
         AuthRepository.deleteUser();
         return true;
       },

@@ -33,7 +33,17 @@ class OnboardingPage extends StatelessWidget {
         children: [
           Align(
               alignment: Alignment.topRight,
-              child: TextButton(onPressed: () {}, child: Text('Skip'))),
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginAndSignupPage(
+                              authenticationPage: AuthenticationPage.login),
+                        ),
+                        (route) => false);
+                  },
+                  child: Text('Skip'))),
           vertical60,
           SizedBox(
             width: width,

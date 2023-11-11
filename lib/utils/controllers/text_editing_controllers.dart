@@ -8,4 +8,10 @@ class TextEditingControllers {
   static final TextEditingController confirmPasswordController =
       TextEditingController();
   static final TextEditingController chatController = TextEditingController();
+  static final TextEditingController passwordResetMailController =
+      TextEditingController();
+  static final TextEditingController manufactureYearController =
+      TextEditingController();
+  static final TextEditingController registerNumberController =
+      TextEditingController();
 }

@@ -82,4 +82,8 @@ class AuthRepository {
     }
     return false;
   }
+
+  static Future resetPassword({required String email}) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 }

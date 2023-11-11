@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:motox/presentation/screens/service_description/service_description.dart';
+import 'package:motox/presentation/screens/slot_selection/screen_slot.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/space.dart';
 import 'package:motox/utils/constants/text_styles.dart';
@@ -25,7 +27,7 @@ Widget buildServiceTypesSection(BuildContext context) {
             mainAxisSpacing: 25,
           ),
           itemBuilder: (context, index) {
-            return buildServiceCard(index);
+            return buildServiceCard(index, context);
           },
           itemCount: 6,
         ),
@@ -34,17 +36,28 @@ Widget buildServiceTypesSection(BuildContext context) {
   );
 }
 
-Widget buildServiceCard(int index) {
+Widget buildServiceCard(int index, BuildContext context) {
   return Card(
     elevation: 5,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(
-          homeScrenImage[index],
-          width: double.infinity,
-          height: 120,
-          fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return SlotSelectionPage(
+                  serviceType: serviceTypes[index],
+                );
+              },
+            ));
+          },
+          child: Image.asset(
+            homeScrenImage[index],
+            width: double.infinity,
+            height: 120,
+            fit: BoxFit.cover,
+          ),
         ),
         const SizedBox(height: 8),
         Text(serviceTypes[index], style: TextStyles.normalTextBlack),
