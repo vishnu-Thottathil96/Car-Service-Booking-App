@@ -46,7 +46,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motox/business%20logic/blocs/bottom_bar/bottom_bar_bloc.dart';
-import 'package:motox/presentation/screens/booking/screen_booking.dart';
+import 'package:motox/presentation/screens/my_booking/screen_booking.dart';
 import 'package:motox/presentation/screens/help/screen_help.dart';
 import 'package:motox/presentation/screens/home/screen_home.dart';
 import 'package:motox/presentation/screens/landing_screen/widgets/bottom_bar.dart';

@@ -15,6 +15,7 @@ import 'package:motox/utils/constants/enums.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/space.dart';
 import 'package:motox/utils/constants/text_styles.dart';
+import 'package:motox/utils/controllers/text_editing_controllers.dart';
 import 'package:motox/utils/design_assets/design_assets.dart';
 import 'package:motox/utils/dialouges/dialouges.dart';
 
@@ -62,6 +63,8 @@ class ServiceDescription extends StatelessWidget {
                   ? Form(
                       key: _formKey,
                       child: TextFormField(
+                        controller:
+                            TextEditingControllers.descriptionController,
                         maxLines: 6,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -77,6 +80,10 @@ class ServiceDescription extends StatelessWidget {
                             return 'Description is required';
                           }
                           return null;
+                        },
+                        onSaved: (value) {
+                          TextEditingControllers.descriptionController.text =
+                              value!;
                         },
                       ),
                     )
@@ -167,6 +174,8 @@ class ServiceDescription extends StatelessWidget {
                     if (_formKey.currentState!.validate() &&
                         selectedCarForService!.model.isNotEmpty) {
                       final bookingModel = BookingModel(
+                          description:
+                              TextEditingControllers.descriptionController.text,
                           serviceType: serviceType!,
                           licensePlate: selectedCarForService!.licensePlate,
                           serviceStatus: serviceType == serviceTypes[0]
@@ -178,6 +187,7 @@ class ServiceDescription extends StatelessWidget {
                       await ServiceRepository().bookNewService(bookingModel);
                       Navigator.pop(context);
                       Navigator.pop(context);
+                      TextEditingControllers.descriptionController.clear();
                     } else {
                       Dialogs.showSnackbar(context, 'Select Car', redColor);
                     }

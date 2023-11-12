@@ -14,4 +14,6 @@ class TextEditingControllers {
       TextEditingController();
   static final TextEditingController registerNumberController =
       TextEditingController();
+  static final TextEditingController descriptionController =
+      TextEditingController();
 }

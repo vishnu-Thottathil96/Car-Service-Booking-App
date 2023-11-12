@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:motox/data/repositories/service_repository.dart';
-import 'package:motox/presentation/screens/booking/widgets/booking_card.dart';
+import 'package:motox/presentation/screens/my_booking/widgets/booking_card.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/space.dart';
 import 'package:motox/utils/constants/text_styles.dart';

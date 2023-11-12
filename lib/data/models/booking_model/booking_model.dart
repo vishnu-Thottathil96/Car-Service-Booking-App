@@ -9,7 +9,7 @@ class BookingModel {
   int? estimatedAmount;
   String? estimatedTime;
   DateTime dateTime;
-
+  String? description;
   BookingModel({
     this.bookingId,
     required this.serviceType,
@@ -18,15 +18,18 @@ class BookingModel {
     required this.userId,
     this.estimatedAmount,
     this.estimatedTime,
+    this.description,
     required this.dateTime,
   });
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     return BookingModel(
-        bookingId: json['bookingId'],
-        serviceType: json['servicetype'],
-        licensePlate: json['licenseplate'],
-        serviceStatus: json['servicestatus'],
-        userId: json['userId'],
-        dateTime: (json['date'] as Timestamp).toDate());
+      bookingId: json['bookingId'],
+      serviceType: json['servicetype'],
+      licensePlate: json['licenseplate'],
+      serviceStatus: json['servicestatus'],
+      userId: json['userId'],
+      dateTime: (json['date'] as Timestamp).toDate(),
+      description: json['description'],
+    );
   }
 }
