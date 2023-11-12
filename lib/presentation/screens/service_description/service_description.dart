@@ -174,6 +174,7 @@ class ServiceDescription extends StatelessWidget {
                     if (_formKey.currentState!.validate() &&
                         selectedCarForService!.model.isNotEmpty) {
                       final bookingModel = BookingModel(
+                          bookedSlot: slot.time.toString(),
                           description:
                               TextEditingControllers.descriptionController.text,
                           serviceType: serviceType!,

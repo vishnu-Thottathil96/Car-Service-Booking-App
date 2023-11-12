@@ -27,6 +27,7 @@ class ServiceRepository {
       'estimatedtime': bookingModel.estimatedTime,
       'date': bookingModel.dateTime,
       'description': bookingModel.description,
+      'bookedslot': bookingModel.bookedSlot,
     });
   }
 
