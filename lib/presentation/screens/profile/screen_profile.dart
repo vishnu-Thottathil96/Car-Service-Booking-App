@@ -1,9 +1,8 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:motox/data/models/model_car.dart';
-import 'package:motox/data/repositories/user_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motox/business%20logic/blocs/profile/profile_bloc.dart';
 import 'package:motox/presentation/screens/brand_selection/car_add.dart';
 import 'package:motox/presentation/screens/car_details/car_details.dart';
 import 'package:motox/presentation/screens/onboard%20screen/screen_onboard.dart';
@@ -17,6 +16,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ProfileBloc>().add(ProfileFetching());
+    context.read<ProfileBloc>().add(FetchUserCars());
     String getCarImage(String brandName, String modelName) {
       for (var carBrand in carData) {
         final brandData = carBrand[brandName];
@@ -27,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
           }
         }
       }
-      return ''; // Return a default image URL or handle the case where the car isn't found.
+      return ''; // Return a default image URL.
     }
 
     return Scaffold(
@@ -85,49 +86,41 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
                 vertical20,
-                GestureDetector(
-                    onTap: () {
-                      UserRepository.uploadProfileImageToFirebase(
-                          FirebaseAuth.instance.currentUser!.uid);
-                    },
-                    child: FutureBuilder<String?>(
-                      future: UserRepository.getProfileImageUrl(
-                          FirebaseAuth.instance.currentUser!.uid),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
-
-                        if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        }
-
-                        final imageUrl = snapshot.data;
-
-                        return CircleAvatar(
-                          radius: 70,
-                          backgroundImage: NetworkImage(
-                              imageUrl ?? 'assets/home_screen_images/paul.png'),
-                        );
-                      },
-                    )),
-                vertical20,
-                FutureBuilder<String>(
-                    future: UserRepository.getCurrentUserName(
-                        FirebaseAuth.instance.currentUser!.uid),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Text('User Name');
-                      }
-                      final userName = snapshot.data!;
-
-                      return Text(
-                        userName,
-                        style: TextStyles.subheadingBlack,
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  buildWhen: (previous, current) =>
+                      (current is ProfileLoading && !current.isCarLoading) ||
+                      current is ProfileFetchSuccess,
+                  builder: (context, state) {
+                    if (state is ProfileLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ProfileFetchSuccess) {
+                      return Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(SelectImageFromGallery());
+                            },
+                            child: CircleAvatar(
+                              radius: 70,
+                              backgroundImage: NetworkImage(
+                                  state.user.profilePhoto.isEmpty
+                                      ? defaultProfile
+                                      : state.user.profilePhoto),
+                            ),
+                          ),
+                          vertical20,
+                          Text(state.user.name,
+                              style: TextStyles.subheadingBlack),
+                          vertical40,
+                        ],
                       );
-                    }),
-                vertical40,
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -140,7 +133,7 @@ class ProfileScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BrandSelectPage(),
+                              builder: (context) => const BrandSelectPage(),
                             ));
                       },
                       child: Image.asset(
@@ -153,68 +146,67 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 vertical30,
 
-                StreamBuilder<List<Car>>(
-                    stream: UserRepository.streamUserCars(
-                        FirebaseAuth.instance.currentUser!.uid),
-                    builder: (context, snapshot) {
-                      log('message');
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-                      if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      }
-                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                            child: Text(
-                          'No cars found.',
-                          style: TextStyles.subheadingGrey,
-                        ));
-                      }
-                      return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  crossAxisCount: 3),
-                          itemBuilder: (context, index) {
-                            final car = snapshot.data![index];
-                            return Material(
-                              color: whiteColor,
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(5),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => CarDetailsPage(
-                                          car: car,
+                BlocBuilder<ProfileBloc, ProfileState>(
+                    buildWhen: (previous, current) =>
+                        (current is ProfileLoading && current.isCarLoading) ||
+                        current is FetchUserCarsSuccess,
+                    builder: (context, state) {
+                      if (state is FetchUserCarsSuccess) {
+                        if (state.userCarList.isEmpty) {
+                          return const Center(
+                            child: Text("No cars found!"),
+                          );
+                        }
+                        return GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 10,
+                                    crossAxisCount: 3),
+                            itemBuilder: (context, index) {
+                              final car = state.userCarList[index];
+                              return Material(
+                                color: whiteColor,
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(5),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CarDetailsPage(
+                                            car: car,
+                                          ),
+                                        ));
+                                  },
+                                  child: SizedBox(
+                                    height: 150,
+                                    width: 100,
+                                    child: Column(
+                                      children: [
+                                        Text(car.model),
+                                        vertical10,
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 80,
+                                          child: Image.network(
+                                              getCarImage(car.make, car.model)),
                                         ),
-                                      ));
-                                },
-                                child: SizedBox(
-                                  height: 150,
-                                  width: 100,
-                                  child: Column(
-                                    children: [
-                                      Text(car.model),
-                                      vertical10,
-                                      SizedBox(
-                                        width: double.infinity,
-                                        height: 80,
-                                        child: Image.network(
-                                            getCarImage(car.make, car.model)),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                          itemCount: snapshot.data!.length);
+                              );
+                            },
+                            itemCount: state.userCarList.length);
+                      } else if (state is ProfileLoading &&
+                          state.isCarLoading) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return const SizedBox();
+                      }
                     }),
                 vertical80 // )
               ],
@@ -225,3 +217,6 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+
+const defaultProfile =
+    'https://camo.githubusercontent.com/c6fe2c13c27fe87ac6581b9fe289d2f071bd1b4ef6f3e3c5fc2aba0bbc23fd88/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f372f37632f50726f66696c655f6176617461725f706c616365686f6c6465725f6c617267652e706e67';

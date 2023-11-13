@@ -114,32 +114,50 @@ class UserRepository {
     }
   }
 
-  static Future<void> uploadProfileImageToFirebase(String userId) async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  static Future<UserModel> getCurrentUserById(String uid) async {
+    try {
+      final userDocument =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-    if (pickedImage != null) {
-      final File imageFile = File(pickedImage.path);
-
-      final Reference storageReference =
-          FirebaseStorage.instance.ref().child('profile_images/$userId.jpg');
-
-      final UploadTask uploadTask = storageReference.putFile(imageFile);
-
-      await uploadTask.whenComplete(() async {
-        final imageUrl = await storageReference.getDownloadURL();
-
-        // Update the user's document with the image URL
-        final userRef =
-            FirebaseFirestore.instance.collection('users').doc(userId);
-        await userRef.update({'image': imageUrl});
-      });
-
-      print('Image uploaded and user document updated');
+      if (userDocument.exists) {
+        final user = userDocument.data();
+        return UserModel.fromJson(user!);
+      } else {
+        throw Exception();
+      }
+    } catch (e) {
+      log('Error fetching user data: $e');
+      throw Exception();
     }
   }
 
-  static Future<String> getProfileImageUrl(String userId) async {
+  static Future<File?> selectImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      return File(pickedImage.path);
+    }
+    return null;
+  }
+
+  static Future<void> uploadProfileImageToFirebase(
+      String userId, File imageFile) async {
+    final Reference storageReference =
+        FirebaseStorage.instance.ref().child('profile_images/$userId.jpg');
+
+    final UploadTask uploadTask = storageReference.putFile(imageFile);
+
+    await uploadTask.whenComplete(() async {
+      final imageUrl = await storageReference.getDownloadURL();
+      final userRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+      await userRef.update({'image': imageUrl});
+    });
+
+    print('Image uploaded and user document updated');
+  }
+
+  static Stream<String> getProfileImageUrl(String userId) async* {
     try {
       final userDoc = await FirebaseFirestore.instance
           .collection('users')
@@ -147,10 +165,36 @@ class UserRepository {
           .get();
       final imageUrl =
           userDoc.data()?['image'] as String? ?? ''; // Provide a default value
-      return imageUrl;
+      yield imageUrl;
     } catch (e) {
       print('Error fetching profile image URL: $e');
-      return ''; // Provide a default value in case of an error
+      yield ''; // Provide a default value in case of an error
+    }
+  }
+
+  static Future<List<Car>> userCars(String userId) async {
+    try {
+      final CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      final DocumentReference userDoc = users.doc(userId);
+      final CollectionReference carsCollection = userDoc.collection('cars');
+
+      final QuerySnapshot carSnapshot = await carsCollection.get();
+
+      return carSnapshot.docs.map((carDoc) {
+        final data = carDoc.data() as Map<String, dynamic>;
+        return Car(
+          make: data['make'],
+          model: data['model'],
+          year: data['year'],
+          fuel: data['fuel'],
+          licensePlate: data['regNumber'],
+        );
+      }).toList();
+    } catch (e) {
+      // Handle exceptions (e.g., invalid user ID, Firestore query issues)
+      print('Error fetching user cars: $e');
+      return [];
     }
   }
 

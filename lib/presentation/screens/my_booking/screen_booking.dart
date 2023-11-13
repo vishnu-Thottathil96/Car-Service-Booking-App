@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:motox/data/repositories/service_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motox/business%20logic/blocs/booking/booking_bloc.dart';
 import 'package:motox/presentation/screens/my_booking/widgets/booking_card.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/space.dart';
@@ -12,7 +12,7 @@ class BookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MyScreenSize.screenHeight(context);
-    ServiceRepository().fetchBookings();
+    context.read<BookingBloc>().add(FetchBookings());
 
     return Scaffold(
       body: SafeArea(
@@ -32,21 +32,24 @@ class BookingScreen extends StatelessWidget {
               ),
               vertical20,
               Expanded(
-                child: FutureBuilder(
-                    future: ServiceRepository().fetchBookings(
-                        userId: FirebaseAuth.instance.currentUser!.uid),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError ||
-                          snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return ListView.separated(
-                        itemBuilder: (context, index) => buildBookingCard(
-                            index, height, context, snapshot.data![index]),
-                        separatorBuilder: (context, index) => vertical20,
-                        itemCount: snapshot.data!.length,
-                      );
-                    }),
+                child: BlocBuilder<BookingBloc, BookingState>(
+                    builder: (context, state) {
+                  if (state is BookingsLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is BookingFetchingSuccess) {
+                    if (state.bookings.isEmpty) {
+                      return const Center(child: Text('No Bookings yet !'));
+                    }
+                    return ListView.separated(
+                      itemBuilder: (context, index) => buildBookingCard(
+                          index, height, context, state.bookings[index]),
+                      separatorBuilder: (context, index) => vertical20,
+                      itemCount: state.bookings.length,
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
               ),
               vertical100,
             ],
