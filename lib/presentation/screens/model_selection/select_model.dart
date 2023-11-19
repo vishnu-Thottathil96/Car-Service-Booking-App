@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motox/business%20logic/blocs/brand_selection/brand_selection_bloc.dart';
 import 'package:motox/presentation/screens/car_other_details/other_details.dart';
 import 'package:motox/utils/car_datas/cars_data.dart';
 import 'package:motox/utils/colors/colors.dart';
@@ -111,47 +113,61 @@ class ModelSelectionPage extends StatelessWidget {
               ),
             ),
             vertical40,
-            GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10),
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 0,
-                  color: Colors.transparent,
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          seletedModel = modelNames[index];
-                        },
-                        child: Container(
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: whiteColor)),
-                          child: Stack(
-                            children: [
-                              Center(
-                                  child: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: modelImageUrls[index],
-                                fit: BoxFit.cover,
-                              )),
-                            ],
+            BlocBuilder<BrandSelectionBloc, BrandSelectionState>(
+              builder: (context, state) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10),
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 0,
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              seletedModel = modelNames[index];
+                              context.read<BrandSelectionBloc>().add(
+                                  SelectionModelIndexChange(
+                                      selectedModelIndex: index,
+                                      selectedModel: seletedModel));
+                            },
+                            child: Container(
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: state is ModelSelected &&
+                                              state.selectedModelIndex == index
+                                          ? greenColor
+                                          : whiteColor)),
+                              child: Stack(
+                                children: [
+                                  Center(
+                                      child: FadeInImage.memoryNetwork(
+                                    placeholder: kTransparentImage,
+                                    image: modelImageUrls[index],
+                                    fit: BoxFit.cover,
+                                  )),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          Text(
+                            modelNames[index], // Display model name
+                            style: TextStyles.normalTextBlack,
+                          ),
+                        ],
                       ),
-                      Text(
-                        modelNames[index], // Display model name
-                        style: TextStyles.normalTextBlack,
-                      ),
-                    ],
-                  ),
+                    );
+                  },
+                  itemCount: modelImageUrls.length,
                 );
               },
-              itemCount: modelImageUrls.length,
             ),
             const Spacer(),
             Padding(

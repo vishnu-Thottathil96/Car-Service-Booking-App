@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motox/business%20logic/blocs/auth/auth_bloc.dart';
 import 'package:motox/business%20logic/blocs/booking/booking_bloc.dart';
 import 'package:motox/business%20logic/blocs/bottom_bar/bottom_bar_bloc.dart';
+import 'package:motox/business%20logic/blocs/brand_selection/brand_selection_bloc.dart';
 import 'package:motox/business%20logic/blocs/profile/profile_bloc.dart';
 import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
 import 'package:motox/presentation/screens/splash/screen_splash.dart';
@@ -30,6 +31,7 @@ class MotoX extends StatelessWidget {
         BlocProvider(create: (context) => BottomBarBloc()),
         BlocProvider(create: (context) => BookingBloc()),
         BlocProvider(create: (context) => ProfileBloc()),
+        BlocProvider(create: (context) => BrandSelectionBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motox/business%20logic/blocs/profile/profile_bloc.dart';
+import 'package:motox/data/repositories/user_repository.dart';
 import 'package:motox/presentation/screens/brand_selection/car_add.dart';
 import 'package:motox/presentation/screens/car_details/car_details.dart';
 import 'package:motox/presentation/screens/onboard%20screen/screen_onboard.dart';
@@ -164,7 +164,7 @@ class ProfileScreen extends StatelessWidget {
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                     mainAxisSpacing: 10,
                                     crossAxisSpacing: 10,
-                                    crossAxisCount: 3),
+                                    crossAxisCount: 2),
                             itemBuilder: (context, index) {
                               final car = state.userCarList[index];
                               return Material(
@@ -181,21 +181,52 @@ class ProfileScreen extends StatelessWidget {
                                           ),
                                         ));
                                   },
-                                  child: SizedBox(
-                                    height: 150,
-                                    width: 100,
-                                    child: Column(
-                                      children: [
-                                        Text(car.model),
-                                        vertical10,
-                                        SizedBox(
-                                          width: double.infinity,
-                                          height: 80,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              car.model,
+                                              style: TextStyles.normalTextBlack,
+                                            ),
+                                          ),
+                                          IconButton(
+                                              onPressed: () async {
+                                                await UserRepository()
+                                                    .removeCarFromFirebase(
+                                                  userId: FirebaseAuth.instance
+                                                      .currentUser!.uid,
+                                                  licensePlate:
+                                                      car.licensePlate,
+                                                );
+                                                // Trigger a reload of the user cars after removal
+                                                context
+                                                    .read<ProfileBloc>()
+                                                    .add(FetchUserCars());
+                                              },
+                                              icon: Icon(
+                                                Icons
+                                                    .remove_circle_outline_outlined,
+                                                color: redColor,
+                                              )),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: SizedBox(
                                           child: Image.network(
-                                              getCarImage(car.make, car.model)),
+                                            getCarImage(
+                                              car.make,
+                                              car.model,
+                                            ),
+                                            fit: BoxFit.scaleDown,
+                                          ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );

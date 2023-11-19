@@ -18,6 +18,7 @@ class UserRepository {
         'id': user.id,
         'name': user.name,
         'email': user.email,
+        'image': ''
       };
       await userDocument.set(userMap);
       log('User saved');
@@ -25,77 +26,6 @@ class UserRepository {
       print('Error saving user data: ${e.toString()}');
     }
   }
-
-  // static Future<void> addCarList() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('cars')
-  //       .doc('carsDocument')
-  //       .set({
-  //     "Toyota": {
-  //       "models": [
-  //         {
-  //           "name": "Camry",
-  //           "image": "camry_image_url",
-  //         },
-  //         {"name": "Corolla", "image": "corolla_image_url"},
-  //         {"name": "RAV4", "image": "rav4_image_url"},
-  //         {"name": "Highlander", "image": "highlander_image_url"},
-  //         {"name": "Tacoma", "image": "tacoma_image_url"},
-  //         {"name": "Sienna", "image": "sienna_image_url"},
-  //         {"name": "Prius", "image": "prius_image_url"},
-  //         {"name": "Yaris", "image": "yaris_image_url"},
-  //         {"name": "CH-R", "image": "chr_image_url"},
-  //         {"name": "Tundra", "image": "tundra_image_url"},
-  //         {"name": "Sequoia", "image": "sequoia_image_url"}
-  //       ]
-  //     },
-  //     "Honda": {
-  //       "models": [
-  //         {"name": "Civic", "image": "civic_image_url"},
-  //         {"name": "Accord", "image": "accord_image_url"},
-  //         {"name": "CR-V", "image": "crv_image_url"},
-  //         {"name": "Pilot", "image": "pilot_image_url"},
-  //         {"name": "Odyssey", "image": "odyssey_image_url"},
-  //         {"name": "Insight", "image": "insight_image_url"},
-  //         {"name": "Clarity", "image": "clarity_image_url"},
-  //         {"name": "Fit", "image": "fit_image_url"},
-  //         {"name": "HR-V", "image": "hrv_image_url"},
-  //         {"name": "Passport", "image": "passport_image_url"},
-  //         {"name": "Ridgeline", "image": "ridgeline_image_url"}
-  //       ]
-  //     },
-  //     "Ford": {
-  //       "models": [
-  //         {"name": "F-150", "image": "f150_image_url"},
-  //         {"name": "Explorer", "image": "explorer_image_url"},
-  //         {"name": "Mustang", "image": "mustang_image_url"},
-  //         {"name": "Escape", "image": "escape_image_url"},
-  //         {"name": "F-250", "image": "f250_image_url"},
-  //         {"name": "Expedition", "image": "expedition_image_url"},
-  //         {"name": "Ranger", "image": "ranger_image_url"},
-  //         {"name": "Bronco", "image": "bronco_image_url"},
-  //         {"name": "Edge", "image": "edge_image_url"},
-  //         {"name": "Fusion", "image": "fusion_image_url"},
-  //         {"name": "EcoSport", "image": "ecosport_image_url"}
-  //       ]
-  //     },
-  //     "Chevrolet": {
-  //       "models": [
-  //         {"name": "Silverado", "image": "silverado_image_url"},
-  //         {"name": "Equinox", "image": "equinox_image_url"},
-  //         {"name": "Camaro", "image": "camaro_image_url"},
-  //         {"name": "Malibu", "image": "malibu_image_url"},
-  //         {"name": "Tahoe", "image": "tahoe_image_url"},
-  //         {"name": "Suburban", "image": "suburban_image_url"},
-  //         {"name": "Corvette", "image": "corvette_image_url"},
-  //         {"name": "Colorado", "image": "colorado_image_url"},
-  //         {"name": "Spark", "image": "spark_image_url"},
-  //         {"name": "Trailblazer", "image": "trailblazer_image_url"},
-  //         {"name": "Trax", "image": "trax_image_url"}
-  //       ]
-  //     },
-  //   });
-  // }
 
   static Future<String> getCurrentUserName(String uid) async {
     try {
@@ -192,7 +122,6 @@ class UserRepository {
         );
       }).toList();
     } catch (e) {
-      // Handle exceptions (e.g., invalid user ID, Firestore query issues)
       print('Error fetching user cars: $e');
       return [];
     }
@@ -275,6 +204,36 @@ class UserRepository {
     } catch (e) {
       print('Error is: $e');
       return null;
+    }
+  }
+
+  //////////
+  Future<void> removeCarFromFirebase({
+    required String userId,
+    required String licensePlate,
+  }) async {
+    try {
+      final CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+      final DocumentReference userDoc = users.doc(userId);
+      final CollectionReference carsCollection = userDoc.collection('cars');
+
+      // Query the car with the specified license plate
+      final querySnapshot = await carsCollection
+          .where('regNumber', isEqualTo: licensePlate)
+          .get();
+
+      // If there is a matching car, delete it
+      if (querySnapshot.docs.isNotEmpty) {
+        final carId = querySnapshot.docs.first.id;
+        await carsCollection.doc(carId).delete();
+        print('Car removed from Firebase');
+      } else {
+        print('Car with the specified license plate not found.');
+      }
+    } catch (e) {
+      print('Error removing car from Firebase: $e');
+      // Handle the error as needed
     }
   }
 }

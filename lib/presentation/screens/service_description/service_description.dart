@@ -55,146 +55,148 @@ class ServiceDescription extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              vertical20,
-              serviceType != null
-                  ? Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        controller:
-                            TextEditingControllers.descriptionController,
-                        maxLines: 6,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            hintText:
-                                'Enter Description About Your Complaint...'),
-                        validator: (value) {
-                          if (serviceType == 'Periodic') {
-                            return null;
-                          }
-                          if (value == null || value.isEmpty) {
-                            return 'Description is required';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          TextEditingControllers.descriptionController.text =
-                              value!;
-                        },
-                      ),
-                    )
-                  : SizedBox(
-                      height: height / 4,
-                      width: double.infinity,
-                      child: Image.asset(
-                        'assets/icons/select_car.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-              vertical20,
-              StreamBuilder<List<Car>>(
-                stream: UserRepository.streamUserCars(
-                    FirebaseAuth.instance.currentUser!.uid),
-                builder: (context, snapshot) {
-                  log('message');
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
-                  if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(
-                        child: Text(
-                      'No cars found.',
-                      style: TextStyles.subheadingGrey,
-                    ));
-                  }
-                  return ValueListenableBuilder(
-                      valueListenable: selectedCarIndex,
-                      builder: (context, value, _) {
-                        return GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisSpacing: 15,
-                                    crossAxisSpacing: 15,
-                                    crossAxisCount: 3),
-                            // scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final car = snapshot.data![index];
-                              return Material(
-                                color: whiteColor,
-                                elevation: 5,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                vertical20,
+                serviceType != null
+                    ? Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          controller:
+                              TextEditingControllers.descriptionController,
+                          maxLines: 6,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    selectedCarIndex.value = index;
-                                    selectedCarForService =
-                                        snapshot.data![index];
-                                  },
-                                  child: Container(
-                                    height: 160,
-                                    width: 110,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color:
-                                                selectedCarIndex.value == index
-                                                    ? greenColor
-                                                    : whiteColor)),
-                                    child: Column(
-                                      children: [
-                                        Text(car.model),
-                                        vertical10,
-                                        SizedBox(
-                                          width: double.infinity,
-                                          height: 80,
-                                          child: Image.network(
-                                              getCarImage(car.make, car.model)),
-                                        ),
-                                      ],
+                              ),
+                              hintText:
+                                  'Enter Description About Your Complaint...'),
+                          validator: (value) {
+                            if (serviceType == 'Periodic') {
+                              return null;
+                            }
+                            if (value == null || value.isEmpty) {
+                              return 'Description is required';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            TextEditingControllers.descriptionController.text =
+                                value!;
+                          },
+                        ),
+                      )
+                    : SizedBox(
+                        height: height / 4,
+                        width: double.infinity,
+                        child: Image.asset(
+                          'assets/icons/select_car.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                vertical20,
+                StreamBuilder<List<Car>>(
+                  stream: UserRepository.streamUserCars(
+                      FirebaseAuth.instance.currentUser!.uid),
+                  builder: (context, snapshot) {
+                    log('message');
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                          child: Text(
+                        'No cars found.',
+                        style: TextStyles.subheadingGrey,
+                      ));
+                    }
+                    return ValueListenableBuilder(
+                        valueListenable: selectedCarIndex,
+                        builder: (context, value, _) {
+                          return GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 15,
+                                      crossAxisSpacing: 15,
+                                      crossAxisCount: 3),
+                              // scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                final car = snapshot.data![index];
+                                return Material(
+                                  color: whiteColor,
+                                  elevation: 5,
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      selectedCarIndex.value = index;
+                                      selectedCarForService =
+                                          snapshot.data![index];
+                                    },
+                                    child: Container(
+                                      height: 160,
+                                      width: 110,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: selectedCarIndex.value ==
+                                                      index
+                                                  ? greenColor
+                                                  : whiteColor)),
+                                      child: Column(
+                                        children: [
+                                          Text(car.model),
+                                          vertical10,
+                                          SizedBox(
+                                            width: double.infinity,
+                                            height: 80,
+                                            child: Image.network(getCarImage(
+                                                car.make, car.model)),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                            itemCount: snapshot.data!.length);
-                      });
-                },
-              ),
-              vertical100,
-              LargeButton(
-                  context: context,
-                  onTap: () async {
-                    if (_formKey.currentState!.validate() &&
-                        selectedCarForService!.model.isNotEmpty) {
-                      final bookingModel = BookingModel(
-                          bookedSlot: slot.time.toString(),
-                          description:
-                              TextEditingControllers.descriptionController.text,
-                          serviceType: serviceType!,
-                          licensePlate: selectedCarForService!.licensePlate,
-                          serviceStatus: serviceType == serviceTypes[0]
-                              ? ServiceStatus.booked.name
-                              : ServiceStatus.pending.name,
-                          dateTime: selectedDateTime.value,
-                          userId: FirebaseAuth.instance.currentUser!.uid);
-                      await ServiceRepository().addSlot(slot);
-                      await ServiceRepository().bookNewService(bookingModel);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      TextEditingControllers.descriptionController.clear();
-                    } else {
-                      Dialogs.showSnackbar(context, 'Select Car', redColor);
-                    }
+                                );
+                              },
+                              itemCount: snapshot.data!.length);
+                        });
                   },
-                  text: 'Next'),
-            ],
+                ),
+                vertical50,
+                LargeButton(
+                    context: context,
+                    onTap: () async {
+                      if (_formKey.currentState!.validate() &&
+                          selectedCarForService!.model.isNotEmpty) {
+                        final bookingModel = BookingModel(
+                            bookedSlot: slot.time.toString(),
+                            description: TextEditingControllers
+                                .descriptionController.text,
+                            serviceType: serviceType!,
+                            licensePlate: selectedCarForService!.licensePlate,
+                            serviceStatus: serviceType == serviceTypes[0]
+                                ? ServiceStatus.booked.name
+                                : ServiceStatus.pending.name,
+                            dateTime: selectedDateTime.value,
+                            userId: FirebaseAuth.instance.currentUser!.uid);
+                        await ServiceRepository().addSlot(slot);
+                        await ServiceRepository().bookNewService(bookingModel);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        TextEditingControllers.descriptionController.clear();
+                      } else {
+                        Dialogs.showSnackbar(context, 'Select Car', redColor);
+                      }
+                    },
+                    text: 'Next'),
+              ],
+            ),
           ),
         ),
       ),

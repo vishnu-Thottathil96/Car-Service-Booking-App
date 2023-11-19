@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:motox/data/models/model_time_slot.dart';
 
 class BookingModel {
   String? bookingId;
@@ -8,6 +7,7 @@ class BookingModel {
   String licensePlate;
   String serviceStatus;
   int? estimatedAmount;
+  double? finalBill;
   String? estimatedTime;
   DateTime dateTime;
   String? description;
@@ -23,6 +23,7 @@ class BookingModel {
     this.description,
     required this.dateTime,
     required this.bookedSlot,
+    this.finalBill,
   });
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     return BookingModel(
@@ -34,6 +35,7 @@ class BookingModel {
       dateTime: (json['date'] as Timestamp).toDate(),
       description: json['description'],
       bookedSlot: json['bookedslot'],
+      finalBill: json['finalbill'],
     );
   }
 }

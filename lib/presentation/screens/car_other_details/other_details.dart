@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motox/business%20logic/blocs/brand_selection/brand_selection_bloc.dart';
 import 'package:motox/data/models/model_car.dart';
 import 'package:motox/data/repositories/user_repository.dart';
 import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
@@ -107,31 +109,44 @@ class OtherDetailsOfCar extends StatelessWidget {
               vertical100,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: LargeButton(
-                    context: context,
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        UserRepository.addCarsForUser(
-                          userId: FirebaseAuth.instance.currentUser!.uid,
-                          car: Car(
-                            make: brand,
-                            model: model,
-                            year: TextEditingControllers
-                                .manufactureYearController.text,
-                            fuel: selectedFuel.value,
-                            licensePlate: TextEditingControllers
-                                .registerNumberController.text,
+                child: BlocConsumer<BrandSelectionBloc, BrandSelectionState>(
+                  listener: (context, state) {
+                    if (state is CarAddSuccessState) {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LandingPage(),
                           ),
-                        );
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LandingPage(),
-                            ),
-                            (route) => false);
-                      }
-                    },
-                    text: 'Finish Setup'),
+                          (route) => false);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is FinishButtonLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    }
+                    return LargeButton(
+                        context: context,
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            final Car car = Car(
+                              make: brand,
+                              model: model,
+                              year: TextEditingControllers
+                                  .manufactureYearController.text,
+                              fuel: selectedFuel.value,
+                              licensePlate: TextEditingControllers
+                                  .registerNumberController.text,
+                            );
+                            context
+                                .read<BrandSelectionBloc>()
+                                .add(FinishSetupButtonClicked(car: car));
+                          }
+                        },
+                        text: 'Finish Setup');
+                  },
+                ),
               )
             ],
           ),

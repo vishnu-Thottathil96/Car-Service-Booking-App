@@ -28,6 +28,7 @@ class ServiceRepository {
       'date': bookingModel.dateTime,
       'description': bookingModel.description,
       'bookedslot': bookingModel.bookedSlot,
+      'finalbill': bookingModel.finalBill,
     });
   }
 
@@ -50,4 +51,37 @@ class ServiceRepository {
       }).toList();
     }
   }
+
+  ///
+  // Future<List<BookingModel>> fetchBookingsInOrder({String? userId}) async {
+  //   try {
+  //     QuerySnapshot<Map<String, dynamic>> snapShots;
+
+  //     if (userId == null) {
+  //       snapShots = await FirebaseFirestore.instance
+  //           .collection('bookings')
+  //           .orderBy('date',
+  //               descending: true) // Order by dateTime in descending order
+  //           .get();
+  //     } else {
+  //       snapShots = await FirebaseFirestore.instance
+  //           .collection('bookings')
+  //           .where('userId', isEqualTo: userId)
+  //           .orderBy('date',
+  //               descending: true) // Order by dateTime in descending order
+  //           .get();
+  //     }
+  //     print('Fetched Bookings: ${snapShots.docs.length}');
+
+  //     return snapShots.docs.map((booking) {
+  //       final data = booking.data();
+  //       return BookingModel.fromJson(data);
+  //     }).toList();
+  //   } catch (error) {
+  //     print('Error fetching bookings: $error');
+  //     return [];
+  //   }
+  // }
+
+  ///
 }

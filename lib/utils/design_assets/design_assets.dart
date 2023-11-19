@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motox/data/models/model_message.dart';
 import 'package:motox/data/models/model_service_item.dart';
 import 'package:motox/data/models/model_time_slot.dart';
@@ -69,34 +70,42 @@ List carNames = [
 ];
 List<Message> messages = [
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Hello, I need to schedule a service for my car.',
       date: DateTime.now().subtract(const Duration(days: 2)),
       isSendByMe: true),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Sure, when would you like to come in?',
       date: DateTime.now().subtract(const Duration(days: 2)),
       isSendByMe: false),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Hi! We have availability this week. What day works best for you?',
       date: DateTime.now().subtract(const Duration(days: 2)),
       isSendByMe: true),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Not much, just working on some projects. How about you?',
       date: DateTime.now().subtract(const Duration(days: 1)),
       isSendByMe: false),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Thursday morning would be perfect.',
       date: DateTime.now().subtract(const Duration(days: 1)),
       isSendByMe: true),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Great, we have an opening on Thursday at 10 AM.',
       date: DateTime.now().subtract(const Duration(days: 1)),
       isSendByMe: false),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text: 'Perfect, I\'ll be there. Do I need to bring any documents?',
       date: DateTime.now().subtract(const Duration(days: 1)),
       isSendByMe: true),
   Message(
+      userId: FirebaseAuth.instance.currentUser!.uid,
       text:
           'No need for documents, just bring your car. We\'ll take care of the rest.',
       date: DateTime.now().subtract(const Duration(days: 1)),
