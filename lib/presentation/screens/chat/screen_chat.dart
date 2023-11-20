@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:motox/data/models/model_message.dart';
+import 'package:motox/data/models/model_user.dart';
 import 'package:motox/data/repositories/message_repository.dart';
+import 'package:motox/data/repositories/user_repository.dart';
 import 'package:motox/presentation/widgets/custom_textfield.dart';
 import 'package:motox/utils/colors/colors.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/text_styles.dart';
 import 'package:motox/utils/controllers/text_editing_controllers.dart';
-import 'package:motox/utils/design_assets/design_assets.dart';
 
 class ChatScreen extends StatelessWidget {
   ChatScreen({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class ChatScreen extends StatelessWidget {
         leading: const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: CircleAvatar(
-            backgroundImage: AssetImage(
+            backgroundImage: NetworkImage(
               'assets/home_screen_images/paul.png',
             ),
           ),
