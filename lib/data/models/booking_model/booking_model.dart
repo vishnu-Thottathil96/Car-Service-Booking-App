@@ -12,6 +12,8 @@ class BookingModel {
   DateTime dateTime;
   String? description;
   String bookedSlot;
+  bool isPaid;
+
   BookingModel({
     this.bookingId,
     required this.serviceType,
@@ -24,6 +26,7 @@ class BookingModel {
     required this.dateTime,
     required this.bookedSlot,
     this.finalBill,
+    this.isPaid = false,
   });
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     return BookingModel(
@@ -35,7 +38,10 @@ class BookingModel {
       dateTime: (json['date'] as Timestamp).toDate(),
       description: json['description'],
       bookedSlot: json['bookedslot'],
+      estimatedAmount: json['estimatedamount'],
+      estimatedTime: json['estimatedtime'],
       finalBill: json['finalbill'],
+      isPaid: json['isPaid'] ?? false,
     );
   }
 }

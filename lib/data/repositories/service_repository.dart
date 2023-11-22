@@ -29,6 +29,7 @@ class ServiceRepository {
       'description': bookingModel.description,
       'bookedslot': bookingModel.bookedSlot,
       'finalbill': bookingModel.finalBill,
+      'isPaid': false,
     });
   }
 
@@ -49,6 +50,24 @@ class ServiceRepository {
         final data = booking.data();
         return BookingModel.fromJson(data);
       }).toList();
+    }
+  }
+
+  ////
+  Future<void> updatePaymentStatus(
+      {required String bookingId, required bool status}) async {
+    try {
+      CollectionReference bookingsCollection =
+          FirebaseFirestore.instance.collection('bookings');
+      DocumentReference bookingDocument = bookingsCollection.doc(bookingId);
+
+      await bookingDocument.update({
+        'isPaid': status,
+      });
+
+      print('amount updated successfully.');
+    } catch (e) {
+      print('Error updating estimatedtime: $e');
     }
   }
 
