@@ -92,7 +92,6 @@ void navigateToScreen({required BuildContext context, required int index}) {
 void _launchPhoneDialer(BuildContext context, String phoneNumber) async {
   Uri phoneUri = Uri.parse('tel:$phoneNumber');
   if (await launchUrl(phoneUri)) {
-    // Dialer opened
   } else {
     // Dialer is not opened
   }
@@ -105,7 +104,6 @@ void _sendEmail(BuildContext context, String emailAddress) async {
   );
 
   if (await launchUrl(emailUri)) {
-    // Email app opened
   } else {
     // Email app could not be opened
   }

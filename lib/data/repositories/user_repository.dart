@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motox/data/models/model_car.dart';
 import 'package:motox/data/models/model_user.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UserRepository {
   static Future<void> saveUserData(UserModel user) async {
@@ -62,6 +63,10 @@ class UserRepository {
   }
 
   static Future<File?> selectImageFromGallery() async {
+    final status = await Permission.storage.request();
+    if (status != PermissionStatus.granted) {
+      return null;
+    }
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
