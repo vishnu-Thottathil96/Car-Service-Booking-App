@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class FAQPage extends StatelessWidget {
+  const FAQPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQ'),
+        title: const Text('FAQ'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16.0),
-        children: [
+        padding: const EdgeInsets.all(16.0),
+        children: const [
           FAQItem(
             question: 'How do I book a service through the app?',
             answer: 'To book a service, simply follow these steps:...',
@@ -72,17 +74,17 @@ class FAQItem extends StatelessWidget {
   final String question;
   final String answer;
 
-  FAQItem({required this.question, required this.answer});
+  const FAQItem({super.key, required this.question, required this.answer});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ExpansionTile(
         title: Text(question),
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Text(answer),
           ),
         ],

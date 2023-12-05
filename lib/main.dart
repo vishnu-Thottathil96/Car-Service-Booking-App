@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,6 @@ import 'package:motox/business%20logic/blocs/booking/booking_bloc.dart';
 import 'package:motox/business%20logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:motox/business%20logic/blocs/brand_selection/brand_selection_bloc.dart';
 import 'package:motox/business%20logic/blocs/profile/profile_bloc.dart';
-import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
 import 'package:motox/presentation/screens/splash/screen_splash.dart';
 import 'firebase_options.dart';
 
@@ -39,14 +37,15 @@ class MotoX extends StatelessWidget {
         theme: ThemeData(
           fontFamily: GoogleFonts.montserrat().fontFamily,
         ),
-        home: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return LandingPage();
-              }
-              return const ScreenSplash();
-            }),
+        home: const ScreenSplash(),
+        // StreamBuilder<User?>(
+        //     stream: FirebaseAuth.instance.authStateChanges(),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         return LandingPage();
+        //       }
+        //       return const ScreenSplash();
+        //     }),
       ),
     );
   }

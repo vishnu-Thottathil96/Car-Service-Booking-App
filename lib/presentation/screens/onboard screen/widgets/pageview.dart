@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motox/presentation/screens/onboard%20screen/widgets/oboardpage.dart';
 import 'package:motox/utils/constants/onboard_content.dart';
-import 'package:motox/utils/constants/screen_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPageView extends StatelessWidget {
@@ -9,8 +8,6 @@ class OnboardingPageView extends StatelessWidget {
   final PageController pageController = PageController();
   @override
   Widget build(BuildContext context) {
-    double width = MyScreenSize.screenWidth(context);
-    double height = MyScreenSize.screenHeight(context);
     return Stack(
       children: [
         PageView.builder(
@@ -34,13 +31,15 @@ class OnboardingPageView extends StatelessWidget {
         ValueListenableBuilder(
             valueListenable: currentPage,
             builder: (context, value, _) {
-              return Positioned(
-                bottom: height / 7,
-                left: width / 2.5,
-                child: AnimatedSmoothIndicator(
-                  activeIndex: value,
-                  count: 3,
-                  effect: ExpandingDotsEffect(),
+              return Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: AnimatedSmoothIndicator(
+                    activeIndex: value,
+                    count: 3,
+                    effect: const ExpandingDotsEffect(),
+                  ),
                 ),
               );
             }),

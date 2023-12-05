@@ -8,6 +8,7 @@ import 'package:motox/utils/car_datas/cars_data.dart';
 import 'package:motox/utils/colors/colors.dart';
 import 'package:motox/utils/constants/space.dart';
 import 'package:motox/utils/constants/text_styles.dart';
+import 'package:motox/utils/dialouges/dialouges.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -39,7 +40,7 @@ class ModelSelectionPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
             vertical25,
             Padding(
@@ -152,6 +153,13 @@ class ModelSelectionPage extends StatelessWidget {
                                     placeholder: kTransparentImage,
                                     image: modelImageUrls[index],
                                     fit: BoxFit.cover,
+                                    imageErrorBuilder:
+                                        (context, error, stackTrace) {
+                                      return Image.asset(
+                                        'assets/icons/no_image.jpg',
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
                                   )),
                                 ],
                               ),
@@ -169,7 +177,7 @@ class ModelSelectionPage extends StatelessWidget {
                 );
               },
             ),
-            const Spacer(),
+            vertical50,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
               child: Row(
@@ -177,14 +185,16 @@ class ModelSelectionPage extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     style: const ButtonStyle(),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     icon: Icon(
                       Icons.arrow_back_ios_rounded,
                       color: blackColor,
                       size: 22,
                     ),
                     label: Text(
-                      'Back',
+                      'Change Brand',
                       style: TextStyles.normalTextBlack,
                     ),
                   ),
@@ -193,14 +203,17 @@ class ModelSelectionPage extends StatelessWidget {
                     child: TextButton.icon(
                       onPressed: () {
                         log(seletedModel);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OtherDetailsOfCar(
-                                brand: brand,
-                                model: seletedModel,
-                              ),
-                            ));
+                        seletedModel.isNotEmpty
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OtherDetailsOfCar(
+                                    brand: brand,
+                                    model: seletedModel,
+                                  ),
+                                ))
+                            : Dialogs.showAlert(context, 'Select model',
+                                'Select a model to continue');
                       },
                       icon: Icon(
                         Icons.arrow_back_ios_rounded,

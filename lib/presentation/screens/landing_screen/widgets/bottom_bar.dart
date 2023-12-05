@@ -23,13 +23,13 @@ class BottomBarWidget extends StatelessWidget {
                 },
                 showUnselectedLabels: true,
                 elevation: 1,
-                unselectedLabelStyle: TextStyle(color: Colors.black),
+                unselectedLabelStyle: const TextStyle(color: Colors.black),
                 backgroundColor: HexColor("#ffd9d9d9"),
                 type: BottomNavigationBarType.fixed,
                 selectedItemColor: Colors.blue,
                 unselectedItemColor: Colors.black54,
                 selectedIconTheme: const IconThemeData(color: Colors.blue),
-                unselectedIconTheme: IconThemeData(color: Colors.black54),
+                unselectedIconTheme: const IconThemeData(color: Colors.black54),
                 items: const [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.home),

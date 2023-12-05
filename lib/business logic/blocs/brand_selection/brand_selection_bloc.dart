@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motox/data/models/model_car.dart';
 import 'package:motox/data/repositories/user_repository.dart';
-import 'package:motox/presentation/screens/model_selection/select_model.dart';
-
 part 'brand_selection_event.dart';
 part 'brand_selection_state.dart';
 

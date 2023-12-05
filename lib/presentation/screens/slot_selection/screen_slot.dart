@@ -35,7 +35,7 @@ class _SlotSelectionPageState extends State<SlotSelectionPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                buildTopBar(),
+                buildTopBar(context),
                 vertical20,
                 CalenderWidget(dates: dates),
                 buildLegend(),

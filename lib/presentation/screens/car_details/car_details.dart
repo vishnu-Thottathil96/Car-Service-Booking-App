@@ -11,7 +11,8 @@ import 'package:motox/utils/constants/text_styles.dart';
 class CarDetailsPage extends StatelessWidget {
   final Car car;
 
-  CarDetailsPage({
+  const CarDetailsPage({
+    super.key,
     required this.car,
   });
 
@@ -76,7 +77,7 @@ class CarDetailsPage extends StatelessWidget {
           vertical20,
           Container(
             width: width / 1.1,
-            color: Color.fromARGB(68, 231, 231, 231),
+            color: const Color.fromARGB(68, 231, 231, 231),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -112,8 +113,6 @@ class CarDetailsPage extends StatelessWidget {
                       }
                     },
                   ),
-                  // Text(
-                  //     'Owner : ${UserRepository.getCurrentUserName(FirebaseAuth.instance.currentUser!.uid)}'),
                   vertical30
                 ],
               ),

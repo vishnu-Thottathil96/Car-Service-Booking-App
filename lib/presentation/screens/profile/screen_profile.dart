@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +94,11 @@ class ProfileScreen extends StatelessWidget {
                       current is ProfileFetchSuccess,
                   builder: (context, state) {
                     if (state is ProfileLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const CircleAvatar(
+                        radius: 70,
+                        backgroundImage: NetworkImage(defaultProfile),
+                      );
+                      // CircularProgressIndicator();
                     } else if (state is ProfileFetchSuccess) {
                       return Column(
                         children: [
@@ -125,7 +131,7 @@ class ProfileScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'My cars',
+                      'My Garage',
                       style: TextStyles.subheadingBlack,
                     ),
                     GestureDetector(
@@ -151,6 +157,9 @@ class ProfileScreen extends StatelessWidget {
                         (current is ProfileLoading && current.isCarLoading) ||
                         current is FetchUserCarsSuccess,
                     builder: (context, state) {
+                      // if (state is ProfileLoading && state.isCarLoading) {
+                      //   return CircularProgressIndicator.adaptive();
+                      // }
                       if (state is FetchUserCarsSuccess) {
                         if (state.userCarList.isEmpty) {
                           return const Center(
@@ -195,18 +204,51 @@ class ProfileScreen extends StatelessWidget {
                                             ),
                                           ),
                                           IconButton(
-                                              onPressed: () async {
-                                                await UserRepository()
-                                                    .removeCarFromFirebase(
-                                                  userId: FirebaseAuth.instance
-                                                      .currentUser!.uid,
-                                                  licensePlate:
-                                                      car.licensePlate,
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Cancel')),
+                                                        TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              await UserRepository()
+                                                                  .removeCarFromFirebase(
+                                                                userId: FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid,
+                                                                licensePlate: car
+                                                                    .licensePlate,
+                                                              );
+                                                              // Trigger a reload of the user cars after removal
+
+                                                              context
+                                                                  .read<
+                                                                      ProfileBloc>()
+                                                                  .add(
+                                                                      FetchUserCars());
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Confirm'))
+                                                      ],
+                                                      content: const Text(
+                                                          'Do you want to remove this Car from your Garage'),
+                                                      title: const Text(
+                                                          'Confirm removal'),
+                                                    );
+                                                  },
                                                 );
-                                                // Trigger a reload of the user cars after removal
-                                                context
-                                                    .read<ProfileBloc>()
-                                                    .add(FetchUserCars());
                                               },
                                               icon: Icon(
                                                 Icons
@@ -223,6 +265,11 @@ class ProfileScreen extends StatelessWidget {
                                               car.model,
                                             ),
                                             fit: BoxFit.scaleDown,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Image.asset(
+                                                  'assets/icons/no_image.jpg');
+                                            },
                                           ),
                                         ),
                                       ),

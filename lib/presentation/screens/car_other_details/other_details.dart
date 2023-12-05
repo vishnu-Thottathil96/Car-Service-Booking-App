@@ -1,13 +1,9 @@
 import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motox/business%20logic/blocs/brand_selection/brand_selection_bloc.dart';
 import 'package:motox/data/models/model_car.dart';
-import 'package:motox/data/repositories/user_repository.dart';
 import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
-import 'package:motox/presentation/screens/profile/screen_profile.dart';
 import 'package:motox/presentation/widgets/custom_textfield.dart';
 import 'package:motox/presentation/widgets/large_button.dart';
 import 'package:motox/utils/car_datas/cars_data.dart';
@@ -32,8 +28,8 @@ class OtherDetailsOfCar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String brandName = brand; // Replace with the desired brand name
-    String modelName = model; // Replace with the desired model name
+    String brandName = brand;
+    String modelName = model;
     ValueNotifier<String> selectedFuel = ValueNotifier<String>('Petrol');
     String? carImageURL;
 
@@ -68,7 +64,7 @@ class OtherDetailsOfCar extends StatelessWidget {
               vertical20,
               const TopBar(),
               vertical20,
-              Container(
+              SizedBox(
                 height: height / 4,
                 width: width / 1.5,
                 child: Stack(
@@ -78,6 +74,12 @@ class OtherDetailsOfCar extends StatelessWidget {
                       placeholder: kTransparentImage,
                       image: carImageURL!,
                       fit: BoxFit.cover,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/icons/no_image.jpg',
+                          fit: BoxFit.cover,
+                        );
+                      },
                     )),
                   ],
                 ),
@@ -143,6 +145,10 @@ class OtherDetailsOfCar extends StatelessWidget {
                                 .read<BrandSelectionBloc>()
                                 .add(FinishSetupButtonClicked(car: car));
                           }
+                          TextEditingControllers.manufactureYearController
+                              .clear();
+                          TextEditingControllers.registerNumberController
+                              .clear();
                         },
                         text: 'Finish Setup');
                   },
@@ -254,6 +260,7 @@ class FuelSelectionWidget extends StatelessWidget {
   final List<String> fuelOptions = ['Petrol', 'Diesel', 'CNG', 'Electric'];
 
   FuelSelectionWidget({
+    super.key,
     required this.selectedFuel,
   });
 
@@ -272,8 +279,8 @@ class FuelSelectionWidget extends StatelessWidget {
               value: selectedFuel
                   .value, // Set the initial value from the ValueNotifier
               onChanged: (String? newValue) {
-                selectedFuel.value =
-                    newValue!; // Update the ValueNotifier's value
+                // Update the ValueNotifier's value
+                selectedFuel.value = newValue!;
               },
               items: fuelOptions.map((String fuel) {
                 return DropdownMenuItem<String>(

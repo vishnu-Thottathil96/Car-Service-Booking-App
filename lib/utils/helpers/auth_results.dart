@@ -16,7 +16,7 @@ resultShow(AuthExceptions authExceptions, BuildContext context) {
     Dialogs.showSnackbar(
         context, 'Password must contain atleast 6 letters', redColor);
   } else if (authExceptions == AuthExceptions.wrongPassword) {
-    Dialogs.showSnackbar(context, 'Wrong Password', redColor);
+    Dialogs.showSnackbar(context, 'Wrong Password / Mail id', redColor);
   } else {
     Dialogs.showSnackbar(context, 'Something went wrong', redColor);
   }

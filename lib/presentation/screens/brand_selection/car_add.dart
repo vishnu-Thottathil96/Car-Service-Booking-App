@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motox/business%20logic/blocs/brand_selection/brand_selection_bloc.dart';
@@ -15,12 +14,12 @@ class BrandSelectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
             vertical35,
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -74,18 +73,28 @@ class BrandsGrid extends StatelessWidget {
                       height: 80,
                       width: 80,
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            carData[index].values.first["logo"],
-                          ),
-                          fit: BoxFit.contain,
-                        ),
+                        // image: DecorationImage(
+                        //   image: NetworkImage(
+                        //     carData[index].values.first["logo"],
+                        //   ),
+                        //   fit: BoxFit.contain,
+                        // ),
                         border: Border.all(
                             color: state is BrandSelected &&
                                     state.selectedIndex == index
                                 ? greenColor
                                 : whiteColor),
                         borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Image.network(
+                        carData[index].values.first["logo"],
+                        fit: BoxFit.scaleDown,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/icons/empty_image.jpeg',
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -130,6 +139,20 @@ class BottomButtons extends StatelessWidget {
         BlocBuilder<BrandSelectionBloc, BrandSelectionState>(
           builder: (context, state) {
             if (state is BrandSelected) {
+              // // If a brand is selected, navigate to the next page
+              // Future.delayed(Duration.zero, () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => ModelSelectionPage(
+              //         brand: state.selectedBrand,
+              //       ),
+              //     ),
+              //   );
+              // });
+
+              // // Return an empty container because the "Next Step" button is not needed
+              // return const SizedBox();
               return Directionality(
                 textDirection: TextDirection.rtl,
                 child: TextButton.icon(

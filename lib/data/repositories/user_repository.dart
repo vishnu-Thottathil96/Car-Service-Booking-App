@@ -23,7 +23,7 @@ class UserRepository {
       await userDocument.set(userMap);
       log('User saved');
     } catch (e) {
-      print('Error saving user data: ${e.toString()}');
+      log('Error saving user data: ${e.toString()}');
     }
   }
 
@@ -84,7 +84,7 @@ class UserRepository {
       await userRef.update({'image': imageUrl});
     });
 
-    print('Image uploaded and user document updated');
+    log('Image uploaded and user document updated');
   }
 
   static Stream<String> getProfileImageUrl(String userId) async* {
@@ -97,7 +97,7 @@ class UserRepository {
           userDoc.data()?['image'] as String? ?? ''; // Provide a default value
       yield imageUrl;
     } catch (e) {
-      print('Error fetching profile image URL: $e');
+      log('Error fetching profile image URL: $e');
       yield ''; // Provide a default value in case of an error
     }
   }
@@ -122,7 +122,7 @@ class UserRepository {
         );
       }).toList();
     } catch (e) {
-      print('Error fetching user cars: $e');
+      log('Error fetching user cars: $e');
       return [];
     }
   }
@@ -196,13 +196,13 @@ class UserRepository {
 
       if (querySnapshot.docs.isNotEmpty) {
         final data = querySnapshot.docs.first.data();
-        print(data);
+        log(data.toString());
         return Car.fromJson(data);
       } else {
         return null; // Car with the given license plate not found.
       }
     } catch (e) {
-      print('Error is: $e');
+      log('Error is: $e');
       return null;
     }
   }
@@ -227,12 +227,12 @@ class UserRepository {
       if (querySnapshot.docs.isNotEmpty) {
         final carId = querySnapshot.docs.first.id;
         await carsCollection.doc(carId).delete();
-        print('Car removed from Firebase');
+        log('Car removed from Firebase');
       } else {
-        print('Car with the specified license plate not found.');
+        log('Car with the specified license plate not found.');
       }
     } catch (e) {
-      print('Error removing car from Firebase: $e');
+      log('Error removing car from Firebase: $e');
       // Handle the error as needed
     }
   }

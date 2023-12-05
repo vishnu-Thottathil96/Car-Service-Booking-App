@@ -6,12 +6,14 @@ class ServiceItemWidget extends StatefulWidget {
   final ServiceItem serviceItem;
   final String images;
 
-  ServiceItemWidget({
+  const ServiceItemWidget({
+    super.key,
     required this.serviceItem,
     required this.images,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _ServiceItemWidgetState createState() => _ServiceItemWidgetState();
 }
 

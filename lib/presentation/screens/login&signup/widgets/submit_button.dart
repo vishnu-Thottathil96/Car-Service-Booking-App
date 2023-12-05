@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motox/business%20logic/blocs/auth/auth_bloc.dart';
 import 'package:motox/presentation/screens/landing_screen/screen_landing.dart';
 import 'package:motox/presentation/screens/mail%20verification/screen_mailverify.dart';
+import 'package:motox/utils/colors/colors.dart';
 import 'package:motox/utils/constants/enums.dart';
 import 'package:motox/utils/controllers/text_editing_controllers.dart';
 import 'package:motox/utils/helpers/auth_results.dart';
@@ -31,7 +32,7 @@ Widget buildAuthenticationButton(
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => MailVerificationPage(),
+                builder: (context) => const MailVerificationPage(),
               ),
               (route) => false);
         } else if (state.authExceptions == AuthExceptions.loginSuccess) {
@@ -60,6 +61,10 @@ Widget buildAuthenticationButton(
         return Align(
           alignment: Alignment.topRight,
           child: ElevatedButton.icon(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(gradientOrange),
+              minimumSize: MaterialStateProperty.all(const Size(130, 50)),
+            ),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 authenticationPage == AuthenticationPage.login

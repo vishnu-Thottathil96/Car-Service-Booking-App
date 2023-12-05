@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:motox/data/models/model_message.dart';
-import 'package:motox/data/models/model_user.dart';
 import 'package:motox/data/repositories/message_repository.dart';
-import 'package:motox/data/repositories/user_repository.dart';
 import 'package:motox/presentation/widgets/custom_textfield.dart';
 import 'package:motox/utils/colors/colors.dart';
 import 'package:motox/utils/constants/screen_size.dart';
@@ -27,16 +25,8 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: gradientOrange,
         toolbarHeight: 65,
-        leading: const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(
-              'assets/home_screen_images/paul.png',
-            ),
-          ),
-        ),
         title: Text(
-          'User Name',
+          'Chat Support',
           style: TextStyles.buttonText,
         ),
       ),
@@ -49,7 +39,7 @@ class ChatScreen extends StatelessWidget {
                     FirebaseAuth.instance.currentUser!.uid),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   if (snapshot.hasError) {
@@ -94,7 +84,18 @@ class ChatScreen extends StatelessWidget {
                               ? Colors.lightBlue[100]
                               : whiteColor,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
+                            borderRadius: message.isSendByMe
+                                ? const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  )
+                                : const BorderRadius.only(
+                                    topRight: Radius.circular(20),
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  ),
+                          ),
                           elevation: 8,
                           child: Padding(
                             padding: const EdgeInsets.all(15),
@@ -102,7 +103,11 @@ class ChatScreen extends StatelessWidget {
                               width: width / 2.5,
                               child: Column(
                                 children: [
-                                  Text(message.text),
+                                  Align(
+                                      alignment: message.isSendByMe
+                                          ? Alignment.topRight
+                                          : Alignment.topLeft,
+                                      child: Text(message.text)),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -142,6 +147,8 @@ class ChatScreen extends StatelessWidget {
                             date: DateTime.now(),
                             isSendByMe: true,
                             userId: FirebaseAuth.instance.currentUser!.uid,
+                            seenByAdmin: false,
+                            seenByUser: true,
                           );
                           MessageRepository().sendMessage(message);
                         }
@@ -151,13 +158,13 @@ class ChatScreen extends StatelessWidget {
                         // Scroll to the bottom after adding a new message
                         _scrollController.animateTo(
                           _scrollController.position.maxScrollExtent,
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       },
-                      icon: Icon(Icons.send),
+                      icon: const Icon(Icons.send),
                     ),
-                    contentPadding: EdgeInsets.all(15),
+                    contentPadding: const EdgeInsets.all(15),
                   ),
                 ),
               ),

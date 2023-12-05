@@ -33,6 +33,6 @@ Widget buildPasswordField(AuthenticationPage authenticationPage,
               ),
             ),
           )
-        : Icon(Icons.visibility_outlined),
+        : const SizedBox(),
   );
 }

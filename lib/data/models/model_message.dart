@@ -5,13 +5,15 @@ class Message {
   final bool isSendByMe;
   final DateTime date;
   final String userId;
-  // final String seen;
+  final bool seenByAdmin;
+  final bool seenByUser;
   Message({
     required this.text,
     required this.date,
     required this.isSendByMe,
     required this.userId,
-    // required this.seen,
+    required this.seenByAdmin,
+    required this.seenByUser,
   });
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
@@ -19,7 +21,8 @@ class Message {
       isSendByMe: json['isSendByMe'],
       date: (json['date'] as Timestamp).toDate(),
       userId: json['userId'],
-      // seen: json['seen'],
+      seenByAdmin: json['seenByAdmin'],
+      seenByUser: json['seenByUser'],
     );
   }
   Map<String, dynamic> toJson() {
@@ -28,7 +31,8 @@ class Message {
       'isSendByMe': isSendByMe,
       'date': Timestamp.fromDate(date),
       'userId': userId,
-      //'seen': seen,
+      'seenByAdmin': seenByAdmin,
+      'seenByUser': seenByAdmin,
     };
   }
 }

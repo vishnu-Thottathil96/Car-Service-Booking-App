@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:motox/data/models/booking_model/booking_model.dart';
 import 'package:motox/data/repositories/service_repository.dart';
@@ -56,7 +60,7 @@ class JobCardPage extends StatelessWidget {
                   width: double.infinity,
                   height: height / 2,
                   child: Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 30,
                     ),
                     child: Column(
@@ -98,7 +102,7 @@ class JobCardPage extends StatelessWidget {
             ),
             bookingModel.finalBill != null
                 ? BillSection(bookingModel: bookingModel)
-                : SizedBox()
+                : const SizedBox()
           ],
         ),
       )),
@@ -119,11 +123,10 @@ class BillSection extends StatefulWidget {
 }
 
 class _BillSectionState extends State<BillSection> {
-  var _razorpay = Razorpay();
+  final _razorpay = Razorpay();
   String userName = 'Unknown User';
   @override
   void initState() {
-    // TODO: implement initState
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
@@ -138,7 +141,7 @@ class _BillSectionState extends State<BillSection> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     // Do something when payment succeeds
-    print('Success');
+    log('Success');
     await ServiceRepository().updatePaymentStatus(
         bookingId: widget.bookingModel.bookingId!, status: true);
     Navigator.pushAndRemoveUntil(
@@ -151,64 +154,62 @@ class _BillSectionState extends State<BillSection> {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
-    print('Failed');
+    log('Failed');
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     // Do something when an external wallet is selected
-    print('External');
+    log('External');
   }
 
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'Payment',
-            style: TextStyles.subheadingGrey,
-          ),
-          vertical70,
-          Text('Final Bill Amount : Rs. ${widget.bookingModel.finalBill}'),
-          vertical60,
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: widget.bookingModel.isPaid == false
-                  ? LargeButton(
-                      context: context,
-                      onTap: () {
-                        double formatedAmount = widget.bookingModel.finalBill!;
-                        var options = {
-                          'method': {
-                            'netbanking': true,
-                            'card': true,
-                            'upi': true,
-                            'wallet': true,
-                          },
-                          'name': userName,
-                          'key': 'rzp_test_xI1eLMUOsqnyzG',
-                          "id": widget.bookingModel.bookingId,
-                          "entity": "order",
-                          "amount": formatedAmount * 100,
-                          "currency": "INR",
-                          "status": "created",
-                          "notes": [],
-                        };
-                        _razorpay.open(options);
-                      },
-                      text: 'Pay Online',
-                    )
-                  : Text(
-                      'Bill Already Paid',
-                      style: TextStyle(color: greenColor),
-                    ))
-        ],
-      ),
+    return Column(
+      children: [
+        Text(
+          'Payment',
+          style: TextStyles.subheadingGrey,
+        ),
+        vertical70,
+        Text('Final Bill Amount : Rs. ${widget.bookingModel.finalBill}'),
+        vertical60,
+        Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: widget.bookingModel.isPaid == false
+                ? LargeButton(
+                    context: context,
+                    onTap: () {
+                      double formatedAmount = widget.bookingModel.finalBill!;
+                      var options = {
+                        'method': {
+                          'netbanking': true,
+                          'card': true,
+                          'upi': true,
+                          'wallet': true,
+                        },
+                        'name': userName,
+                        'key': 'rzp_test_xI1eLMUOsqnyzG',
+                        "id": widget.bookingModel.bookingId,
+                        "entity": "order",
+                        "amount": formatedAmount * 100,
+                        "currency": "INR",
+                        "status": "created",
+                        "notes": [],
+                      };
+                      _razorpay.open(options);
+                    },
+                    text: 'Pay Online',
+                  )
+                : Text(
+                    'Bill Already Paid',
+                    style: TextStyle(color: greenColor),
+                  ))
+      ],
     );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _razorpay.clear();
     super.dispose();
   }

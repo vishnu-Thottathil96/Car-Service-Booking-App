@@ -17,7 +17,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
       FetchBookings event, Emitter<BookingState> emit) async {
     emit(BookingsLoading());
     final bookings = await ServiceRepository()
-        .fetchBookings(userId: FirebaseAuth.instance.currentUser!.uid);
+        .fetchBookingsInOrder(userId: FirebaseAuth.instance.currentUser!.uid);
     emit(BookingFetchingSuccess(bookings: bookings));
   }
 }

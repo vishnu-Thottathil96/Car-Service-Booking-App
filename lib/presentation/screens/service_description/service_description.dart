@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:motox/data/models/booking_model/booking_model.dart';
 import 'package:motox/data/models/model_car.dart';
 import 'package:motox/data/models/model_time_slot.dart';
@@ -21,6 +22,7 @@ import 'package:motox/utils/dialouges/dialouges.dart';
 
 Car? selectedCarForService;
 
+// ignore: must_be_immutable
 class ServiceDescription extends StatelessWidget {
   ServiceDescription({super.key, this.serviceType, required this.slot});
   final String? serviceType;
@@ -45,6 +47,7 @@ class ServiceDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MyScreenSize.screenHeight(context);
+    double width = MyScreenSize.screenWidth(context);
     return Scaffold(
       backgroundColor: whiteColor,
       resizeToAvoidBottomInset: false,
@@ -173,7 +176,8 @@ class ServiceDescription extends StatelessWidget {
                     context: context,
                     onTap: () async {
                       if (_formKey.currentState!.validate() &&
-                          selectedCarForService!.model.isNotEmpty) {
+                          selectedCarForService!.model.isNotEmpty &&
+                          selectedCarForService != null) {
                         final bookingModel = BookingModel(
                             bookedSlot: slot.time.toString(),
                             description: TextEditingControllers
@@ -187,9 +191,53 @@ class ServiceDescription extends StatelessWidget {
                             userId: FirebaseAuth.instance.currentUser!.uid);
                         await ServiceRepository().addSlot(slot);
                         await ServiceRepository().bookNewService(bookingModel);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
+                        // Navigator.pop(context);
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            Future.delayed(const Duration(milliseconds: 3025),
+                                () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+
+                            return AlertDialog(
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize
+                                      .min, // Set the mainAxisSize to min
+                                  children: [
+                                    Text(
+                                      'Service Booked',
+                                      style: TextStyle(
+                                          fontSize: 25, color: greenColor),
+                                    ),
+                                    SizedBox(
+                                      height: height / 5,
+                                      width: width / 1.2,
+                                      child: Lottie.asset(
+                                        'assets/icons/Animation - 1701195301291.json',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+                        // Navigator.pushAndRemoveUntil(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => ConfirmedScreen(),
+                        //     ),
+                        //     (route) => false);
                         TextEditingControllers.descriptionController.clear();
+                        selectedCarForService = null;
                       } else {
                         Dialogs.showSnackbar(context, 'Select Car', redColor);
                       }

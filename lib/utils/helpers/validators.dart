@@ -33,8 +33,10 @@ String? validateConfirmPassword(String? value, String password) {
 }
 
 String? validateCarYear(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Year is required';
+  if (value == null ||
+      value.isEmpty ||
+      int.tryParse(value)! > DateTime.now().year) {
+    return 'valid Year is required';
   }
 
   //   add more complex email validation logic

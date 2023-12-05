@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:motox/presentation/screens/service_description/service_description.dart';
 import 'package:motox/presentation/screens/slot_selection/screen_slot.dart';
 import 'package:motox/utils/constants/screen_size.dart';
 import 'package:motox/utils/constants/space.dart';
@@ -55,12 +54,15 @@ Widget buildServiceCard(int index, BuildContext context) {
           child: Image.asset(
             homeScrenImage[index],
             width: double.infinity,
-            height: 120,
-            fit: BoxFit.cover,
+            // height: 120,
+            fit: BoxFit.contain,
           ),
         ),
-        const SizedBox(height: 8),
-        Text(serviceTypes[index], style: TextStyles.normalTextBlack),
+        //const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Text(serviceTypes[index], style: TextStyles.normalTextBlack),
+        ),
       ],
     ),
   );

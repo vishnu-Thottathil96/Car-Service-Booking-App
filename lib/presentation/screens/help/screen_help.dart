@@ -24,8 +24,8 @@ class HelpScreen extends StatelessWidget {
               ),
               vertical20,
               SizedBox(
-                height: 100,
-                width: 100,
+                height: 55,
+                width: 55,
                 child: Image.asset(
                   'assets/icons/support.png',
                   fit: BoxFit.cover,
@@ -70,7 +70,7 @@ void navigateToScreen({required BuildContext context, required int index}) {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FAQPage(),
+            builder: (context) => const FAQPage(),
           ));
       break;
     case 1:
@@ -81,10 +81,10 @@ void navigateToScreen({required BuildContext context, required int index}) {
           ));
       break;
     case 2:
-      showAlertToContact(context: context, contact: '8129152508');
+      showAlertToContact(context: context, contact: '1234567890');
       break;
     case 3:
-      showAlertToContact(context: context, contact: 'motoxsupport@gmail.com');
+      showAlertToContact(context: context, contact: 'demoMailid@gmail.com');
       break;
   }
 }

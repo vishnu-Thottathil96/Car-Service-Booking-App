@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:motox/data/models/booking_model/booking_model.dart';
 import 'package:motox/data/models/model_time_slot.dart';
@@ -65,42 +67,42 @@ class ServiceRepository {
         'isPaid': status,
       });
 
-      print('amount updated successfully.');
+      log('amount updated successfully.');
     } catch (e) {
-      print('Error updating estimatedtime: $e');
+      log('Error updating estimatedtime: $e');
     }
   }
 
   ///
-  // Future<List<BookingModel>> fetchBookingsInOrder({String? userId}) async {
-  //   try {
-  //     QuerySnapshot<Map<String, dynamic>> snapShots;
+  Future<List<BookingModel>> fetchBookingsInOrder({String? userId}) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapShots;
 
-  //     if (userId == null) {
-  //       snapShots = await FirebaseFirestore.instance
-  //           .collection('bookings')
-  //           .orderBy('date',
-  //               descending: true) // Order by dateTime in descending order
-  //           .get();
-  //     } else {
-  //       snapShots = await FirebaseFirestore.instance
-  //           .collection('bookings')
-  //           .where('userId', isEqualTo: userId)
-  //           .orderBy('date',
-  //               descending: true) // Order by dateTime in descending order
-  //           .get();
-  //     }
-  //     print('Fetched Bookings: ${snapShots.docs.length}');
+      if (userId == null) {
+        snapShots = await FirebaseFirestore.instance
+            .collection('bookings')
+            .orderBy('date',
+                descending: true) // Order by dateTime in descending order
+            .get();
+      } else {
+        snapShots = await FirebaseFirestore.instance
+            .collection('bookings')
+            .where('userId', isEqualTo: userId)
+            .orderBy('date',
+                descending: true) // Order by dateTime in descending order
+            .get();
+      }
+      log('Fetched Bookings: ${snapShots.docs.length}');
 
-  //     return snapShots.docs.map((booking) {
-  //       final data = booking.data();
-  //       return BookingModel.fromJson(data);
-  //     }).toList();
-  //   } catch (error) {
-  //     print('Error fetching bookings: $error');
-  //     return [];
-  //   }
-  // }
+      return snapShots.docs.map((booking) {
+        final data = booking.data();
+        return BookingModel.fromJson(data);
+      }).toList();
+    } catch (error) {
+      log('Error fetching bookings: $error');
+      return [];
+    }
+  }
 
   ///
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:motox/utils/constants/text_styles.dart';
 
-Widget buildTopBar() {
+Widget buildTopBar(BuildContext context) {
   return Row(
     children: [
       IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.arrow_back_ios),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.arrow_back_ios),
       ),
       Text(
         'Select date and time',

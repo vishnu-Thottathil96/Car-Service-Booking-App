@@ -53,7 +53,7 @@ class ResetPasswordForm extends StatelessWidget {
                     cursorColor: blackColor,
                     style: TextStyle(color: blackColor),
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
+                        contentPadding: const EdgeInsets.all(8),
                         prefixIcon: Icon(
                           Icons.mail_outline_rounded,
                           color: greyColor,

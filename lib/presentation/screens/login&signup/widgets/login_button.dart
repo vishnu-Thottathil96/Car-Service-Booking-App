@@ -24,10 +24,10 @@ class LargeButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: gradientOrange,
+          color: Colors.orange,
         ),
-        width: width / 1.8,
-        height: height / 15,
+        width: width / 2.8,
+        height: height / 20,
         child: Center(
             child: Text(
           text,
