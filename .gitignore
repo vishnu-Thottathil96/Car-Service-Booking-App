@@ -1,3 +1,5 @@
+# Ignore the Api key
+Motox/lib/utils/constants/api_keys.dart
 # Miscellaneous
 *.class
 *.log

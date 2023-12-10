@@ -7,6 +7,7 @@ import 'package:motox/utils/car_datas/cars_data.dart';
 import 'package:motox/utils/colors/colors.dart';
 import 'package:motox/utils/constants/space.dart';
 import 'package:motox/utils/constants/text_styles.dart';
+import 'package:motox/utils/dialouges/dialouges.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class BrandSelectPage extends StatelessWidget {
@@ -14,12 +15,12 @@ class BrandSelectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: ListView(
+        child: Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             vertical35,
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -138,25 +139,11 @@ class BottomButtons extends StatelessWidget {
         ),
         BlocBuilder<BrandSelectionBloc, BrandSelectionState>(
           builder: (context, state) {
-            if (state is BrandSelected) {
-              // // If a brand is selected, navigate to the next page
-              // Future.delayed(Duration.zero, () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => ModelSelectionPage(
-              //         brand: state.selectedBrand,
-              //       ),
-              //     ),
-              //   );
-              // });
-
-              // // Return an empty container because the "Next Step" button is not needed
-              // return const SizedBox();
-              return Directionality(
-                textDirection: TextDirection.rtl,
-                child: TextButton.icon(
-                  onPressed: () {
+            return Directionality(
+              textDirection: TextDirection.rtl,
+              child: TextButton.icon(
+                onPressed: () {
+                  if (state is BrandSelected) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -164,21 +151,62 @@ class BottomButtons extends StatelessWidget {
                             brand: state.selectedBrand,
                           ),
                         ));
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_rounded,
-                    color: blackColor,
-                    size: 22,
-                  ),
-                  label: Text(
-                    'Next Step',
-                    style: TextStyles.normalTextBlack,
-                  ),
+                  } else {
+                    Dialogs.showSnackbar(context, 'Select a brand', redColor);
+                  }
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios_rounded,
+                  color: blackColor,
+                  size: 22,
                 ),
-              );
-            } else {
-              return const SizedBox();
-            }
+                label: Text(
+                  'Next Step',
+                  style: TextStyles.normalTextBlack,
+                ),
+              ),
+            );
+            // if (state is BrandSelected) {
+            // // If a brand is selected, navigate to the next page
+            // Future.delayed(Duration.zero, () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => ModelSelectionPage(
+            //         brand: state.selectedBrand,
+            //       ),
+            //     ),
+            //   );
+            // });
+
+            // // Return an empty container because the "Next Step" button is not needed
+            // return const SizedBox();
+            //   return Directionality(
+            //     textDirection: TextDirection.rtl,
+            //     child: TextButton.icon(
+            //       onPressed: () {
+            //         Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => ModelSelectionPage(
+            //                 brand: state.selectedBrand,
+            //               ),
+            //             ));
+            //       },
+            //       icon: Icon(
+            //         Icons.arrow_back_ios_rounded,
+            //         color: blackColor,
+            //         size: 22,
+            //       ),
+            //       label: Text(
+            //         'Next Step',
+            //         style: TextStyles.normalTextBlack,
+            //       ),
+            //     ),
+            //   );
+            // } else {
+            //   return const SizedBox();
+            // }
           },
         ),
       ],
